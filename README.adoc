@@ -1,0 +1,103 @@
+image::logo.svg[Percolate LMS Logo,600,150]
+
+= Percolate LMS =
+
+Percolate is a Learning Management System with the following features:
+
+* Native course builder
+* Multi-tenancy (optional)
+* Discussions (comment boards)
+* Tag-based organization and creative use of tags
+* RESTful API with https://en.wikipedia.org/wiki/JSON_Web_Token[HATEOAS] and https://en.wikipedia.org/wiki/JSON_Web_Token[JSON Web Token] authentication
+* PDF certificate generation
+
+== Requirements ==
+
+Percolate uses the following technologies and libraries:
+
+* API "backend" written in https://secure.php.net/[PHP]
+	* https://getcomposer.org/[Composer] to manage 3rd-party libraries
+	* https://bitbucket.org/ratfactor/hummingjay/src/default/[HummingJay] for REST API
+	* https://github.com/firebase/php-jwt[PHP-JWT] for JSON Web Token encoding/decoding
+	* https://github.com/aws/aws-sdk-php[AWS SDK for PHP] (optional) to use S3 storage and SES email
+	* https://github.com/Setasign/FPDF[FPDF] for PDF creation
+* UI "frontend" written in https://en.wikipedia.org/wiki/JavaScript[JavaScript]
+	* https://mithril.js.org/[Mithril], a tiny framework for Single-Page Applications
+	* https://momentjs.com/[Moment.js] for date and time manipulation
+	* http://ramdajs.com/[Ramda] for "functional-style" utilities
+	* https://github.com/RubaXa/Sortable[Sortable] for drag-n-drop lists (specifically Percolate's learning paths)
+* Relational database targets https://www.postgresql.org/[PostgreSQL]
+* The "build" system is a simple shell script which "minifies" (with https://github.com/douglascrockford/JSMin[JSMin]) and then concatenates the JavaScript UI into a bundle.js file.
+
+== High-level overview ==
+
+Percolate aims to be flexible while using as few unique concepts as possible.
+Much of this is achieved with the pervasive use of tags.
+
+=== Multi-tenancy ===
+
+The database contains a PostgreSQL 'schema' for each LMS tenant which gives complete isolation between tenants.  
+
+See `db/master.sql`.
+
+Tenants are looked up by one or more hostnames (think "domain name": example.com, lms1.example.org, lms2.example.org, etc.).
+
+If you prefer, you can create a single tenant and treat Percolate as a single instance, ignoring the multi-tenancy aspect entirely.
+
+=== Database elements ===
+
+The database stores these basic elements:
+
+* file
+* person
+* content
+* enrollment rules (erules)
+* records
+* comments (for discussions)
+* config (tenant-specific system settings)
+
+For the complete story, see `db/tenant.sql`.
+
+=== Types of content ===
+
+There are four types of content:
+
+* *SCORM* - the https://en.wikipedia.org/wiki/Sharable_Content_Object_Reference_Model[standard e-learning package] uploaded to the LMS in a .zip file
+* *Content Builder* or just "content" - the native content type in Percolate which is composed of pages containing images, videos, audio, quizzes, file attachments, etc.
+* *Discussions* - small forum-like discussion boards
+* *Learning Paths* - lists of other content put into specific order, may be nested
+
+=== Tags ===
+
+People may be grouped and organized by tags.
+Percolate LMS Administrators are simply people with the special `$admin` system tag.
+An initial administrator account is created for each new tenant.
+
+Content is likewise organized by tags.  
+There are system tags for content such as `$catalog` and `$certificate` which can affect how the LMS treats the content.
+
+Assignments are made by creating "enrollment rules" which may be one of these four types:
+
+* Person to Content
+* Person Tag to Content
+* Person to Content Tag
+* Person Tag to Content Tag
+
+Bascially, an enrollment rule can be as simple as assigning one content item to one person or as complex as assigning an entire lesson plan to a group of people.
+
+Because people in an organization can sometimes be part of overlapping groups, Percolate has a more advanced feature for creating logical combinations of tags called "metatags".
+Metatags use boolean operators `AND` and `OR` to combine exactly two other tags (example: `sales AND department-c`).
+After being created, metatags are automatically appended to any person who matches the rule (anyone who has both the `sales` and `department-c` tags in our example).
+
+When a person launches a content item, a record is created or updated with the launch time, launch count, etc.
+All content types have the same basic records, even discussions.  
+Other types such as SCORM and those made with the Content Builder can record much more information.
+
+
+== License ==
+
+Percolate is released under AFFERO GPL v3. See LICENSE.  
+
+Subdirectories such as `vendor` may have other FOSS libraries released under other licenses.
+
+
