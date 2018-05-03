@@ -26,8 +26,8 @@ Percolate uses the following technologies and libraries:
 	* https://momentjs.com/[Moment.js] for date and time manipulation
 	* http://ramdajs.com/[Ramda] for "functional-style" utilities
 	* https://github.com/RubaXa/Sortable[Sortable] for drag-n-drop lists (specifically Percolate's learning paths)
-* Relational database targets https://www.postgresql.org/[PostgreSQL]
-* The "build" system is a simple shell script which "minifies" (with https://github.com/douglascrockford/JSMin[JSMin]) and then concatenates the JavaScript UI into a bundle.js file.
+- Relational database targets https://www.postgresql.org/[PostgreSQL]
+- The "build" system is a simple shell script which "minifies" (with https://github.com/douglascrockford/JSMin[JSMin]) and then concatenates the JavaScript UI into a bundle.js file.
 
 == High-level overview ==
 
