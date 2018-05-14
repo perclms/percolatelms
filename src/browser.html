@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<!--
+			hm-json Browser - 
+
+			Instructions: place this file on a server that contains an hm-json API.  
+			Point to your API by modifying the JavaScript variable 'apiRoot' below.
+
+			License and Copyright
+			======================================================================
+			hm-json (Hypermedia JSON) Browser is released under the MIT license:
+			Copyright 2012 Dave Gauer (http://ratfactor.com/)
+
+			Permission is hereby granted, free of charge, to any person obtaining
+			a copy of this software and associated documentation files (the
+			"Software"), to deal in the Software without restriction, including
+			without limitation the rights to use, copy, modify, merge, publish,
+			distribute, sublicense, and/or sell copies of the Software, and to
+			permit persons to whom the Software is furnished to do so, subject to
+			the following conditions:
+
+			The above copyright notice and this permission notice shall be
+			included in all copies or substantial portions of the Software.
+
+			THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+			EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+			MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+			NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+			LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+			OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+			WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+			======================================================================
+		-->
+
+		<meta name="author" content="Dave Gauer" />
+		<meta name="copyright" content="Copyright Dave Gauer 2012. All Rights Reserved." />
+		<title>hm-json Browser</title>
+		<style>
+			body { font-family: sans-serif; margin: 2em; background-color: #F0F0F5;}
+			pre { overflow: auto; }
+			#browser-address-field { width: 60%; border: 1px solid #666; margin: 0;}
+			#browser-address-bar { background-color: #999; padding-bottom: 4px; color: #FFF; }
+			#browser-add-header { cursor: pointer; text-decoration: underline; }
+			#browser-add-header-fields .name {	width: 100px; margin-right: 1em;}
+			#browser-add-header-fields .value {	width: 300px; }
+			#browser-body { background-color: #FFF; border-top: 1px solid #666; margin: 0;}
+			#browser-response-headers { color: #666; } 
+			#browser-window { background-color: #DDD; border: 4px solid #999; }
+			#browser-status-bar { background-color: #EEE; color: #333;}
+			#browser-hypermedia-message { color: #336699; background-color: #C2D1E0; }
+			#browser-success-message { color: #4F8A10; background-color: #DFF2BF; }
+			#browser-fail-message { color: #9F6000; background-color: #FEEFB3; }
+			.message { border: 1px solid; display: inline-block; padding: 3px; margin: 3px; }
+			.bottom { padding: .5em; }
+			.clear-left { clear: left; }
+			.float-right { float: right; width: 500px; margin-top: 3px; margin-right: 15px; }
+			#browser-hypermedia { color: #336699; background-color: #C2D1E0; border: 3px solid; float: right; width: 500px; z-index: 20; position: absolute; -webkit-box-shadow: 4px 4px 4px 2px #666; box-shadow: 4px 4px 4px 2px #666; padding-bottom: 7px; }
+			#browser-hypermedia .heading { background-color: #336699; color: #FFF; font-size: 1.5em; text-align: center; }
+			#browser-hypermedia .text { font-style: italic; padding: .5em; }
+			#browser-hypermedia .link { border: 1px solid; border-left-width: 5px; margin: 7px 7px 0 7px; padding: 3px; background-color: #E7EDF3; cursor: pointer;}
+			#browser-hypermedia .link-instructions { font-style: italic; padding: .5em; }
+			#browser-hypermedia .link .title { font-weight: bold; }
+			#browser-hypermedia .link .method-and-uri { display: block; float: right; }
+			#browser-hypermedia .link .method { color: #85A3C2; }
+			#browser-hypermedia .link .href { color: #0099FF; }
+			#browser-hypermedia .link .description { font-style: italic; font-size: .8em; padding: 2px; display: block; }
+			#browser-hypermedia .link .rel { color: #85A3C2; font-size: .8em; padding: 2px; display: block; }
+			.delete { color: #CC2900; }
+			.modify { color: #CC9900; }
+			.get { color: #527A00; }
+			.error { color: #FFF !important; background-color: #CC0000 !important;}
+			.form-panel-container { border-width: 0 1px 4px 1px; border-style: solid; background-color: #E7EDF3; margin: 0 20px 7px 20px; min-height: 4px; }
+			.form-panel { padding: 7px; display: none; }
+			.form-panel textarea { width: 100%; }
+		</style>
+	</head>
+	<body>
+
+		<!-- start browser HTML source -->
+
+		<div id="browser-window">
+			<div id="browser-address-bar">
+				<label class="address-label">Address: <input type="text" id="browser-address-field"></label>
+				<button type="button" id="browser-address-go">Go</button>
+				<button type="button" id="browser-refresh">Refresh</button>
+				<span id="browser-add-header">+Header</span>
+				<div id="browser-add-header-fields"></div>
+			</div>
+			<span id="browser-status-bar" class="message"></span>
+			<span id="browser-success-message" class="message"></span>
+			<span id="browser-hypermedia-message" class="message"></span>
+			<span id="browser-fail-message" class="message"></span>
+			<div class="float-right">
+				<div id="browser-hypermedia">
+					<div class="heading title"></div>
+					<div class="text description"></div>
+					<div class="heading links">Links</div>
+					<div class="text link-instructions"></div>
+					<div class="link-box"></div>
+				</div>
+			</div>
+			<pre id="browser-response-headers"></pre><br class="clear-left">
+			<pre id="browser-body"></pre>
+			<div class="bottom clear-left">hm-json Browser v1.3 <a href="https://bitbucket.org/ratfactor/hm-json-browser">About</a></div>
+		</div>
+
+		<!-- end browser HTML source -->
+
+	</body>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script type="text/javascript">
+
+		// Create a root path for the API to browse.  By default it is this document's root.
+		// For example, if this document is http://example.com/api/browser.html
+		// Then we'll start at http://example.com/api/
+		// The root can be overridden with browser.html#/a-path
+		// (Or you can just hard-code your API root path instead.)
+		var currentRoot = document.URL.substring(0, document.URL.lastIndexOf('/'));
+		var apiRoot = (window.location.hash != "" ? window.location.hash.substring(1) : currentRoot);
+
+		$(document).ready(function(){ 
+			// Start "browsing".  To work, apiRoot needs to serve up json (with hypermedia)
+			var browser = new Browser(apiRoot);
+		});
+
+
+
+
+		// Start the browser object definition
+		// ====================================================================
+
+		function Browser(uriRoot){
+			var bwindow = $("#browser-window");
+			var body = $("#browser-body");
+			var responseHeaders = $("#browser-response-headers");
+			var addressField = $("#browser-address-field");
+			var goButton = $("#browser-address-go").click(onGoAddress);
+			var refreshButton = $("#browser-refresh").click(onRefresh);
+			var addHeaderButton = $("#browser-add-header").click(onAddHeader);
+			var addHeaderFields = $("#browser-add-header-fields");
+			var statusBar = $("#browser-status-bar");
+			var successMessage = $("#browser-success-message");
+			var hypermediaMessage = $("#browser-hypermedia-message");
+			var failMessage = $("#browser-fail-message");
+			var hypermediaDisplay = $("#browser-hypermedia");
+			var hypermediaTitle = $("#browser-hypermedia .title");
+			var hypermediaDescription = $("#browser-hypermedia .description");
+			var hypermediaLinkInstruct = $("#browser-hypermedia .link-instructions");
+			var hypermediaLinkBox = $("#browser-hypermedia .link-box");
+			var jqXhr = null;
+			var jqXhrData = null;
+			var currentReq = null;
+			var self = this; // for event methods and such
+			var lastReq = null;
+
+
+			function onGoAddress(){ // from address bar
+				gotoUrl(addressField.val());
+			}
+
+			function onRefresh(){ // from address bar
+				sendRequest(lastReq);
+			}
+
+			function onAddHeader(){
+				addHeaderFields.append('<div class="field">Header: <input class="name" type="text" value="Authorization"><input type="text" class="value" value="Bearer ">');
+			}
+
+			function gotoUrl(url){
+				var req = { type: "OPTIONS", url: url, dataType: "json" };
+				sendRequest(req);
+			}
+
+			function sendRequest(req){
+				currentReq = req;
+				lastReq = req;
+				statusBar.text("Making "+req.type+" request to "+req.url+"...");
+				//window.location.hash = req.url; // commented out to not update the real address bar
+				clearMessages();
+				hypermediaDisplay.hide();
+				addressField.val(req.url);
+				addHeaderFields.find(".field").each(function(){
+					if(!req.headers) req.headers = {};
+					req.headers[$(this).find(".name").val()] = $(this).find(".value").val();
+				});
+				jqXhr = $.ajax(req);
+				jqXhr.always(onDone);
+			}
+
+			function onDone(){
+				if(jqXhr.status == 0){
+					statusBar.text("Connection error!  See below.");
+					body.text(
+							"The XMLHttpRequest object halted with a status of 0. This is probably due to a security \nrestriction. For best results, this browser should live on the same domain as the API \nit is trying to browse. For example, if your API lives at http://example.com/api, then \nthis browser should also be served up from somewhere on example.com.\n\nThe status text follows:\n--------------\n"+jqXhr.statusText);
+					return;
+				}
+				if(jqXhr.status != 200){
+					statusBar.addClass("error");
+					hypermediaTitle.addClass("error");
+				}
+				statusBar.text("Server responds: "+jqXhr.status+" "+jqXhr.statusText);
+				responseHeaders.text(jqXhr.getAllResponseHeaders());
+				try{								
+					var data = $.parseJSON(jqXhr.responseText);
+				} catch (e) { data = null; }
+				if(!data){
+					failMsg("Response does not appear to be valid JSON.");
+					body.text(jqXhr.responseText);
+					return;
+				}
+				// browser must be new enough to support JSON.stringify
+				body.text(JSON.stringify(data, null, 4));
+				successMsg("Valid JSON response.");
+				readHypermedia(data);
+			}
+
+			function readHypermedia(data){
+				jqXhrData = data;
+				if(!data.hypermedia){
+					failMsg("No hypermedia found in JSON response.");
+					return;
+				}
+				hypermediaMsg("Hypermedia found.");
+				hypermediaTitle.text(data.hypermedia.title ? data.hypermedia.title : "Untitled Document");
+				hypermediaDescription.text(data.hypermedia.description ? data.hypermedia.description : "No description.");
+				hypermediaLinkBox.empty();
+				if(data.hypermedia.links){ 
+					hypermediaLinkInstruct.text("This document's hypermedia contains the following links.  Click on any of them to browse to the URI with the specified HTTP method.");
+					$.each(data.hypermedia.links, readLink);
+				}
+				else{
+					hypermediaLinkInstruct.text("This document's hypermedia does not contain any links.");
+				}
+				hypermediaDisplay.show();
+			}
+
+			function readLink(index, value){
+
+				//todo: handle RFC 6570 Level 1 URI Templates
+
+				if(!value.method) value.method = "GET";
+				if(!value.rel) value.rel = "item";
+				if(!value.description) value.description = value.rel;
+				var link = $("<div class=\"link\"><span class=\"title\">"+value.title+"</span> <span class=\"method-and-uri\"> <span class=\"method\">"+value.method+"</span> <span class=\"href\">"+value.href+"</span> </span> <span class=\"rel\">"+value.rel+"</span> <span class=\"description\">"+value.description+"</span> </div>");
+				link.click(onLinkClick(value));
+				value.jqObj = link;
+
+				// handle  RFC 6570 Level 1 URI template
+				value.uriParams = getTemplateParams(value.href);
+
+				// add form panel if it's PUT or POST or has params
+				addFormPanelIfNeeded(value);
+
+				// style the link based on the method type
+				if(value.method == "DELETE"){ link.addClass("delete"); }
+				if(value.method == "PUT" || value.method == "POST"){ link.addClass("modify"); }
+				if(value.method == "GET"){ link.addClass("get"); }
+
+				// add the link to the browser
+				hypermediaLinkBox.append(link);
+			}
+
+			function getTemplateParams(uri){
+				var getParams = /\{([A-Za-z0-9_]+)\}/g;
+				var params = [];
+				for(;;){
+					match = getParams.exec(uri);
+					if(!match){ break; }
+					params.push(match[1]); // match[1] is the first capture group
+				}
+				return params;
+			}
+
+			function addFormPanelIfNeeded(linkRef){
+				if(linkRef.uriParams.length == 0 && linkRef.method != "PUT" && linkRef.method != "POST"){
+					return; // not needed
+				}
+				var formPanel = $("<div class=\"form-panel\"></div>").hide();
+				var formPanelBtn = $("<button type=\"button\">Go</button>").click(onFormPanelGo(linkRef));
+				var formPanelContainer = $("<div class=\"form-panel-container\"></div>");
+
+				// add JSON input textarea if PUT or POST
+				if(linkRef.method == "PUT" || linkRef.method == "POST"){
+					formPanel.append("<div><label>Enter your JSON data to send:<textarea></textarea></label></div>");
+				}
+
+				// add fields for each parameter
+				$.each(linkRef.uriParams, function(index, value){
+					formPanel.append("<div><label>"+value+"<input type=\"text\" class=\""+value+"\"></label></div>");
+				});
+
+				// display on the screen
+				linkRef.formPanel = formPanel;
+				formPanel.append(formPanelBtn);
+				formPanelContainer.append(linkRef.formPanel);
+				linkRef.jqObj.after(formPanelContainer);
+			}
+
+			function onLinkClick(linkRef){
+				return function(){
+					if(linkRef.formPanel){
+						linkRef.formPanel.toggle();
+					}
+					else{
+						gotoLink(linkRef, null);
+					}
+				};
+			}
+
+			function onFormPanelGo(linkRef){
+				return function(){
+					var data = null;
+					if(linkRef.method == "PUT" || linkRef.method == "POST"){
+						data = linkRef.formPanel.find("textarea").val();
+					}
+					$.each(linkRef.uriParams, function(index, value){
+						linkRef.href = linkRef.href.replace("{"+value+"}",linkRef.formPanel.find("."+value).val());
+					});
+					gotoLink(linkRef, data);
+				}
+			}
+
+			function gotoLink(linkRef, data){
+				var req = { type:linkRef.method, url:uriRoot+linkRef.href, dataType:"json" };
+				if(data){
+					req.contentType = "application/json";
+					req.data = data;
+					req.processData = false;  // don't do any conversion, send as is
+				}
+				sendRequest(req);
+			}
+
+			function successMsg(msg){ successMessage.text(msg); successMessage.show(); }
+			function failMsg(msg){ failMessage.text(msg); failMessage.show(); }
+			function hypermediaMsg(msg){ hypermediaMessage.text(msg); hypermediaMessage.show(); }
+			function clearMessages(){ 
+				successMessage.hide(); 
+				failMessage.hide(); 
+				hypermediaMessage.hide();  
+				statusBar.removeClass("error");
+				hypermediaTitle.removeClass("error");
+			}
+
+			// upon construction, send an HTTP OPTIONS request to the root URI:
+			gotoUrl(uriRoot+'/');
+		}
+
+		// ====================================================================
+		// End the browser object definition
+
+	</script>
+</html>
