@@ -1,0 +1,19 @@
+{
+	"main":{
+		"env": "dev",
+		"dev_hostname": "tenant1.example.com",
+		"lms_log": "/var/log/lms.txt"
+	},
+	"db":{
+		"pg_superuser_pwd": "xxx",
+		"master_role_pwd": "xxx"
+	},
+	"aws":{
+		"access_key_id": "xxx",
+		"access_key": "xxx",
+		"s3_bucket": "my_static_bucket"
+	},
+	"tokens":{
+		"tenant_private_key": "xxx",
+	}
+}
