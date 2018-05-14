@@ -1,2 +1,4 @@
 *~
 build/jsmin
+src/js/bundle.js
+
