@@ -1,4 +1,6 @@
 *~
 build/jsmin
 src/js/bundle.js
-
+src/api/vendor/*
+src/api/SvcEmail.php
+src/api/SvcStorage.php

@@ -42,7 +42,6 @@ cat \
 	content.js \
 	catalog.js \
 	lpath.js \
-	session.js \
 	cb.js \
 	discussion.js \
 	config.js \

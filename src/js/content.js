@@ -26,7 +26,6 @@ var ContentComponent = function() {
 		comment: 0,
 		lpath: 0,
 		scorm: 0,
-		// session: 0 // session-ectomy
 	};
 
 	// for new content mini-form
@@ -67,14 +66,6 @@ var ContentComponent = function() {
 				c.tags += "$learning-path";
 				type_counts.lpath++;
 			}
-			/*
-			 * session-ectomy
-			 *
-			if (c.type == "session") {
-				c.tags += "$session";
-				type_counts.session++;
-			}
-			*/
 			return c;
 		}
 		return R.map(injectTag, list);
@@ -148,12 +139,11 @@ var ContentComponent = function() {
 		submitNew(new_type(), new_title());
 	}
 
-	function submitNew(type, title) { //, session_cid) { // session-ectomy
+	function submitNew(type, title) { 
 		var newc = St.use("content");
 		newc.set({
 			type: type,
 			title: title,
-			// session_cid: (type == "session" ? session_cid : undefined) // session-ectomy
 		});
 		newc.send().then(function(data) {
 			m.route.set("/content/" + Ut.encodeId(data.new_id));
