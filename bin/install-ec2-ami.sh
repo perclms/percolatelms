@@ -169,9 +169,11 @@ composer update
 popd
 
 
-note "Setting PHP timezone"
+note "Setting up PHP"
 
-sed -i.bak 's/^;\?date.timezone.*/date.timezone=UTC/' /etc/php-5.6.ini
+s="s/^;date.timezone.*/date.timezone = UTC/"
+s="$s;s/^;always_populate_raw_post_data/always_populate_raw_post_data/"
+sed -i.bak "$s" /etc/php.ini
 
 
 
