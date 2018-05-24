@@ -29,6 +29,10 @@ Percolate uses the following technologies and libraries:
 - Relational database targets https://www.postgresql.org/[PostgreSQL]
 - The "build" system is a simple shell script which "minifies" (with https://github.com/douglascrockford/JSMin[JSMin]) and then concatenates the JavaScript UI into a bundle.js file.
 
+== Installation ==
+
+See link:INSTALL.adoc[].
+
 == High-level overview ==
 
 Percolate aims to be flexible while using as few unique concepts as possible.
