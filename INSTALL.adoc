@@ -1,0 +1,225 @@
+= Installing Percolate
+
+These instructions are intentionally generic.  
+See link:bin/install-ec2-ami.sh[] and link:bin/install-ln-slackware.sh[] for two example installation scripts.
+
+Percolate's chief requirements are:
+
+* A UNIX-like environment
+* PHP 5.6
+* PosgreSQL 9.6
+* A web server (e.g. Apache)
+
+To install Percolate to a fresh server:
+
+== Clone the Git repo, set permissions
+
+Though not required, Percolate expects to be installed at `/lms`.
+
+	sudo mkdir /lms
+	sudo chown <you> /lms
+	git clone https://github.com/perclms/percolatelms.git /lms
+
+To serve Percolate directly from the repo, you will need to grant read access to the `src/` directory for your webserver.
+
+Example:
+
+	chgrp apache /lms/src
+	chmod g+r /lms/src
+
+== Create the config file
+
+Percolate looks for its configuration in a file called `/etc/lms.json`.
+Copy the example:
+
+	sudo cp /lms/lms.json.example /etc/lms.json
+
+Then edit it to your preferences.
+
+.lms.json settings
+|===
+| main.env | "dev" displays system errors to end-users, "production" does not (either way, they are logged) 
+| main.lms_log | log file location (must have write permission!)
+| main.tenant_script | location of SQL command file to create new tenant (LMS instance) schema
+| db.master_role_pwd | PostgreSQL `lms` database password for `master` user/role
+| aws.* | (optional) settings for AWS services for file storage and email delivery
+| tokens.tenant_private_key | private key used to sign JWT authentication tokens for logins and API access privileges
+|===
+
+
+== Get API (PHP) dependencies
+
+The Percolate API is written in PHP. It depends on a few 3rd party libraries:
+
+* https://bitbucket.org/ratfactor/hummingjay/src/default/[HummingJay] - tiny RESTful API router framework
+* https://github.com/firebase/php-jwt[PHP-JWT] - JSON Web Token (authentication) encode/decode library
+* https://github.com/Setasign/FPDF[FPDF] - PDF creation library
+
+If you will be using AWS services for file storage (S3) and email (SES), then you'll also need
+
+* https://github.com/aws/aws-sdk-php[AWS SDK for PHP] - the library for using all of Amazon's AWS services
+
+(If not, you may remove the AWS SDK from `src/api/composer.json` and `composer.lock`.)
+
+All of these libraries are most easily installed using the link:https://getcomposer.org/[Composer] PHP dependency manager.  
+
+Percolate is already configured to download specific versions of these libraries using Composer like so:
+
+
+	curl -sS https://getcomposer.org/installer | sudo php
+	sudo mv composer.phar /usr/local/bin/composer
+	sudo ln -s /usr/local/bin/composer /usr/bin/composer
+	cd /lms/src/api
+	composer update
+
+
+== Create the LMS log file
+
+Create and set permissions for the Percolate log file.  Make sure the path matches that in the `/etc/lms.json` config file mentioned above.
+
+Example:
+	
+	sudo touch /var/log/lms
+	sudo chown <you> /var/log/lms
+	chgrp apache /var/log/lms
+	chmod g+w /var/log/lms
+
+Note that it may be the web server delivering the LMS API which will need write permission to the LMS log.
+
+== Install the master database schema
+
+The PostgreSQL database for Percolate is composed of two parts:
+
+1. A single `master` schema (with accompanying user/role) with a `host` table which performs hostname (or domain) lookups for tenants
+2. One or more `tenantN` (where N is the `tenant_id`) schemas with accompanying roles, which completely isolate instances of the LMS from each other
+
+The `master` schema and role are created first.
+The LMS then connects to the database with the `master` role to create new tenant schemas.
+
+You will need superuser (`postgres`) access rights to create the `master` role in your PostgreSQL database "cluster". 
+Getting these permissions will vary by system, but will probably take the general form of:
+
+	sudo -iu postgres <command>
+
+The script to create the Percolate `master` role and schema are located at `/lms/db/master.sql`. 
+
+Here is an example of running the script with PostgreSQL's `psql` tool:
+
+	sudo -iu postgres psql -f /lms/db/master.sql
+
+The script intially sets a temporary password.
+You'll need to update it to match that which was set in `/etc/lms.json` above so that Percolate can use it to authenticate with PostgreSQL.
+
+Example 1:
+
+	sudo -iu postgres psql -c "ALTER USER master with password '<password>';"
+
+To keep the password out of your shell history, consider using something like the `read` command to capture the password into an environment variable instead.
+
+Example 2:
+
+	read -s -p "Master pwd: " masterpwd
+	echo ""
+	sudo -iu postgres psql -c "ALTER USER master with password '$masterpwd';"
+
+Arguably, even better, you can grab the value from `/etc/lms.json` directly.
+
+Example 3:
+
+	masterpwd=$(grep master /etc/lms.json | cut -d'"' -f4)
+	sudo -iu postgres psql -c "ALTER USER master with password '$masterpwd';"
+
+Once you've set the `master` user/role password, you can test the role and schema by dumping (listing) the tables:
+
+	PGPASSWORD=$masterpwd psql -U master -d lms -c "\dt"
+
+Which should produce:
+
+	        List of relations
+	 Schema |  Name  | Type  | Owner  
+	--------+--------+-------+--------
+	 master | host   | table | master
+	 master | tenant | table | master
+	(2 rows)
+
+	
+
+== Configure the Svc* files
+
+Percolate uses wrapper classes to contain functionality which may depend on 3rd party services (static file storage and sending email). 
+These are prefixed with 'Svc' and are excluded from the repository so that your settings will not be overwritten by updates.
+
+	ls src/api/Svc*
+
+returns
+ 
+	src/api/SvcEmail_example.php
+	src/api/SvcStorage_example.php
+
+By default, these are setup to use AWS services (found in `src/api/Aws.php`).  
+
+Copy the examples and edit as needed:
+
+	cp src/api/SvcEmail_example.php src/api/SvcEmail.php
+	cp src/api/SvcStorage_example.php src/api/SvcStorage.php
+
+Percolate will now use the services you have specified.
+
+== Configure the web server
+
+Percolate's UI (front-end) consists of static content in the `src/` (namely `index.html` and the directories `css/` and `js/`).   These files can be delivered from most any kind of web server or service.
+
+Percolate's API (back-end) is a PHP application located in `src/api/`.
+
+Both of these portions may be served directly from the repo or they can be copied, moved, or symlinked as needed.
+
+The API requires PHP and is expecting to be resolved using a "clean URL" scheme like so:
+
+.Table Percolate API URL/URI resolution scheme
+|===
+| Request | Rewritten URI
+
+| /api/ | api/index.php
+| /api/content | api/index.php/content
+| /api/content/23 | api/index.php/content/23
+| /api/content?type=scorm | api/index.php/content?type=scorm
+|===
+
+With Apache, this can be achieved using the rewrite engine module.
+For concrete examples, search for the "VirtualHost" directive in the `bin/install-*` scripts.
+
+Percolate has also been tested with NGINX and PHP + FastCGI (FPM).
+(TODO: locate example config.)
+
+
+
+== Check for PHP GD
+
+Percolate uses the GD library to manipulate graphics (mostly resizing content thumbnails and user avatars).
+You can check for the existence of GD with
+
+	php -r 'var_dump(gd_info());'
+
+You may need to install GD for PHP depending on your platform.
+If it did not come bundled with PHP, it will typically be installed as a package.
+
+Search for 'gd' in the `bin/install-*` scripts for examples.
+
+
+== Create a tenant
+
+To see the LMS working in a browser, you'll need to add a tenant.
+The simplest way is from the command line:
+
+	php /lms/bin/new-tenant.php test-tenant.example.com
+
+where `test-tenant.example.com` is a domain you can point to your web server.
+
+An administrator account will be created with the following initial credentials:
+
+	username: admin
+	password: 1234
+
+Once looged in, you should use the LMS interface to change these credentials immediately!
+
+

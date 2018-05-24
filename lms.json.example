@@ -1,7 +1,6 @@
 {
 	"main":{
 		"env": "dev",
-		"dev_hostname": "tenant1.example.com",
 		"lms_log": "/var/log/lms",
 		"tenant_script": "/lms/db/tenant.sql"
 	},

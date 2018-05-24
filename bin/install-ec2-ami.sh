@@ -46,6 +46,7 @@ note "Installing Apache, PostgreSQL, PHP..."
 yum install -y \
 	httpd24 \
 	php56 \
+	php56-gd \
 	postgresql96 \
 	postgresql96-server \
 	php-ZendFramework-Db-Adapter-Pdo-Pgsql
