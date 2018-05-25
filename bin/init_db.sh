@@ -15,7 +15,7 @@ fi
 
 
 lmsconf () {
-	perl -MJSON -n000e "print decode_json(\$_)->{$1}{$2}" /etc/lms.json
+	grep $1 /etc/lms.conf | cut -d'=' -f 2
 }
 
 if su - postgres -c "psql password=$db_pwd -c \"SELECT 'exists' FROM pg_database WHERE datname='lms'\"" | grep exists
@@ -32,7 +32,7 @@ else
 
 	# set 'master' user password
 	echo "Setting master password..."
-	master_pwd=$(lmsconf db master_role_pwd)
+	master_pwd=$(lmsconf db_master_pwd)
 	su - postgres -c "psql password=$db_pwd -c \"ALTER USER master WITH PASSWORD '$master_pwd';\""
 
 	echo "LMS database created.  This does not create a tenant."

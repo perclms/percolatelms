@@ -20,14 +20,19 @@
 namespace Lms;
 
 class Conf{
-	public static function read($cat, $key){
-		$json = file_get_contents('/etc/lms.json');
-		$conf = json_decode($json, true);
-		if (isset($conf[$cat]) && isset($conf[$cat][$key])) {
-			return $conf[$cat][$key];
+	public static function read($key){
+		$config = '/etc/lms.conf';
+		if (! is_readable($config)) {
+			throw new SystemError("Unable to read from '$config': ".$e->getMessage());
 		}
-		else {
-			throw new SystemError("Unable to read LMS conf file!");
+		$lines = file($config);
+		foreach($lines as $line) {
+			if(preg_match("/^$key\s*=\s*(.*)$/", $line, $m)) {
+				return $m[1];
+			}
 		}
+
+		throw new SystemError("Unable to read key '$key' from config.");
 	}
 }
+

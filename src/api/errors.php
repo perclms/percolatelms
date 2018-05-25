@@ -59,7 +59,7 @@ function auth_error($http_status, $msg){
 
 function system_error($msg){
 	$stamp = Log::error($msg);
-	if (Conf::read('main', 'env') != "dev") {
+	if (Conf::read('lms_env') != "dev") {
 		// in production environment, we don't want to leak system errors
 		$msg = "Sorry, there was a system error (reference code '{$stamp}').";
 	}

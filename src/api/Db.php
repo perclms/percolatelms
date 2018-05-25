@@ -47,7 +47,7 @@ class Db{
 		 */
 		if(self::$pdo && !self::$pdo_type === 'master') return self::$pdo;
 
-		$SECRET_DB_LMS_MASTER = Conf::read('db', 'master_role_pwd');
+		$SECRET_DB_LMS_MASTER = Conf::read('db_master_pwd');
 
 		self::$pdo = new \PDO("pgsql:dbname=lms user=master password={$SECRET_DB_LMS_MASTER}");
 		self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);

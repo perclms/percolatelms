@@ -33,7 +33,7 @@ class Auth{
 		 *
 		 */
 		// return $SECRET_LMS_JWT_KEY;
-		return Conf::read('tokens', 'tenant_private_key');
+		return Conf::read('token_private_key');
 	}
 
 	public static function hash_password($password){

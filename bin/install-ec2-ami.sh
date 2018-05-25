@@ -15,10 +15,10 @@
 #
 # Then put the LMS config file in place and edit it to your liking:
 #
-#	sudo cp /lms/lms.json.example /etc/lms.json
-#	sudo vim /etc/lms.json
+#	sudo cp /lms/lms.conf.example /etc/lms.conf
+#	sudo vim /etc/lms.conf
 #
-# Don't forget to set proper permissions for /etc/lms.json
+# Don't forget to set proper permissions for /etc/lms.conf
 # The LMS (as user/group: apache/apache) needs read permission.
 #
 # Note: if you will NOT be using AWS services (S3, SES),
@@ -142,7 +142,7 @@ service postgresql96 start
 note "Creating LMS database..."
 
 sudo -iu postgres psql -f /lms/db/master.sql
-echo "Let's set the LMS DB 'master' role password (should match 'master_role_pwd' in /etc/lms.json)."
+echo "Let's set the LMS DB 'master' role password (should match 'db_master_pwd' in /etc/lms.conf)."
 read -s -p "Master pwd: " masterpwd
 echo ""
 sudo -iu postgres psql -c "ALTER USER master with password '$masterpwd';"

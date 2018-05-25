@@ -29,21 +29,22 @@ Example:
 
 == Create the config file
 
-Percolate looks for its configuration in a file called `/etc/lms.json`.
+Percolate looks for its configuration in a file called `/etc/lms.conf`.
 Copy the example:
 
-	sudo cp /lms/lms.json.example /etc/lms.json
+	sudo cp /lms/lms.conf.example /etc/lms.conf
 
 Then edit it to your preferences.
 
-.lms.json settings
+.lms.conf settings
 |===
-| main.env | "dev" displays system errors to end-users, "production" does not (either way, they are logged) 
-| main.lms_log | log file location (must have write permission!)
-| main.tenant_script | location of SQL command file to create new tenant (LMS instance) schema
-| db.master_role_pwd | PostgreSQL `lms` database password for `master` user/role
-| aws.* | (optional) settings for AWS services for file storage and email delivery
-| tokens.tenant_private_key | private key used to sign JWT authentication tokens for logins and API access privileges
+| lms_env | "dev" displays system errors to end-users, "production" does not (either way, they are logged) 
+| log_path | log file location (must have write permission!)
+| db_new_tenant | location of SQL command file to create new tenant (LMS instance) schema
+| db_master_pwd | PostgreSQL `lms` database password for `master` user/role
+| aws_* | (optional) settings for AWS services for file storage and email delivery
+| token_private_key | private key used to sign JWT authentication tokens for logins and API access privileges
+| email_from | email address used in the "from" address for any email sent by the LMS
 |===
 
 
@@ -75,7 +76,7 @@ Percolate is already configured to download specific versions of these libraries
 
 == Create the LMS log file
 
-Create and set permissions for the Percolate log file.  Make sure the path matches that in the `/etc/lms.json` config file mentioned above.
+Create and set permissions for the Percolate log file.  Make sure the path matches that in the `/etc/lms.conf` config file mentioned above.
 
 Example:
 	
@@ -108,7 +109,7 @@ Here is an example of running the script with PostgreSQL's `psql` tool:
 	sudo -iu postgres psql -f /lms/db/master.sql
 
 The script intially sets a temporary password.
-You'll need to update it to match that which was set in `/etc/lms.json` above so that Percolate can use it to authenticate with PostgreSQL.
+You'll need to update it to match that which was set in `/etc/lms.conf` above so that Percolate can use it to authenticate with PostgreSQL.
 
 Example 1:
 
@@ -122,11 +123,11 @@ Example 2:
 	echo ""
 	sudo -iu postgres psql -c "ALTER USER master with password '$masterpwd';"
 
-Arguably, even better, you can grab the value from `/etc/lms.json` directly.
+Arguably, even better, you can grab the value from `/etc/lms.conf` directly.
 
 Example 3:
 
-	masterpwd=$(grep master /etc/lms.json | cut -d'"' -f4)
+	masterpwd=$(grep db_master_pwd /etc/lms.conf | cut -d"=" -f 2)
 	sudo -iu postgres psql -c "ALTER USER master with password '$masterpwd';"
 
 Once you've set the `master` user/role password, you can test the role and schema by dumping (listing) the tables:

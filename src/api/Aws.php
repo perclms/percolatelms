@@ -26,8 +26,8 @@ class Aws{
 	public static function getClient(){
 		if(self::$sdkClient) return self::$sdkClient;
 
-		$SECRET_AWS_ACCESS_KEY_ID = Conf::read('aws', 'access_key_id');
-		$SECRET_AWS_SECRET_ACCESS_KEY = Conf::read('aws', 'access_key');
+		$SECRET_AWS_ACCESS_KEY_ID = Conf::read('aws_access_key_id');
+		$SECRET_AWS_SECRET_ACCESS_KEY = Conf::read('aws_access_key');
 
 
 		self::$sdkClient = new \Aws\Sdk([
@@ -53,9 +53,10 @@ class Aws{
 	}
 
 	public static function sesSendEmail($to, $subject, $body){
+		$EMAIL_FROM = Conf::read('email_from');
 		$ses = self::getSesClient();
 		$ses->sendEmail([
-			'Source' => 'system@perclms.com',
+			'Source' => $EMAIL_FROM,
 			'Destination' => [ 
 				'ToAddresses' => [ $to ],
 			],
@@ -86,7 +87,7 @@ class Aws{
 	}
 
 	public static function s3Upload($fid, $local_file, $dest_fname){
-		$LMS_S3_BUCKET = Conf::read('aws', 's3_bucket');
+		$LMS_S3_BUCKET = Conf::read('aws_s3_bucket');
 		$s3 = self::getS3Client();
 		// Upload an object by streaming the contents of a file
 		// $pathToFile should be absolute path to a file on disk
@@ -137,7 +138,7 @@ class Aws{
 	}
 
 	public static function s3UploadDir($fid, $local_dir){
-		$LMS_S3_BUCKET = Conf::read('aws', 's3_bucket');
+		$LMS_S3_BUCKET = Conf::read('aws_s3_bucket');
 		$s3 = self::getS3Client();
 		$bucket = $LMS_S3_BUCKET;
 
@@ -153,7 +154,7 @@ class Aws{
 		//		true if this function will handle the response
 		// 		false if the calling resource needs to return an error
 
-		$LMS_S3_BUCKET = Conf::read('aws', 's3_bucket');
+		$LMS_S3_BUCKET = Conf::read('aws_s3_bucket');
 
 		$bucket = $LMS_S3_BUCKET;
 		

@@ -10,10 +10,10 @@
 # 
 # After installing git (if needed) and cloning the LMS repo:
 #
-#	sudo cp /lms/lms.json.example /etc/lms.json
-#	sudo vim /etc/lms.json
+#	sudo cp /lms/lms.conf.example /etc/lms.conf
+#	sudo vim /etc/lms.conf
 #
-# Don't forget to set proper permissions for /etc/lms.json
+# Don't forget to set proper permissions for /etc/lms.conf
 # The LMS (as user/group: apache/apache) needs read permission.
 #
 # Note: if you will NOT be using AWS services (S3, SES),
@@ -29,8 +29,8 @@ set -e
 pushd /tmp
 
 die () { echo -e "\033[30;41mError: $1\033[0;0m"; exit 1; }
-header () { echo ""; echo -e "\033[30;46m$1\033[0;0m" }
-lmsconf () { perl -MJSON -n000e "print decode_json(\$_)->{$1}{$2}" /etc/lms.json }
+header () { echo ""; echo -e "\033[30;46m$1\033[0;0m"; }
+lmsconf () { grep $1 /etc/lms.conf | cut -d'=' -f 2; }
 
 
 slackpkg_install () {
@@ -165,13 +165,13 @@ fi
 
 
 
-header "Checking /etc/lms.json config file"
+header "Checking /etc/lms.conf config file"
 
-if ! [ -f /etc/lms.json ]
+if ! [ -f /etc/lms.conf ]
 then
-	die "Could not find /etc/lms.json. You'll need to put one there first.  See lms.json.template (in LMS repo) for an example."
+	die "Could not find /etc/lms.conf. You'll need to put one there first.  See lms.conf.example (in LMS repo) for an example."
 else
-	echo "lms.json exists"
+	echo "lms.conf exists"
 fi
 
 
@@ -401,7 +401,7 @@ else
 
 	# set 'master' user password
 	echo "Setting master password..."
-	master_pwd=$(lmsconf db master_role_pwd)
+	master_pwd=$(lmsconf db_master_pwd)
 	su - postgres -c "psql password=$db_pwd -c \"ALTER USER master WITH PASSWORD '$master_pwd';\""
 
 	echo "LMS database created.  This does not create a tenant."

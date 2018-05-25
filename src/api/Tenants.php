@@ -138,7 +138,7 @@ class Tenants{
 
 		$pdo = Db::setRole($tid);
 
-		$script_path = Conf::read('main', 'tenant_script');
+		$script_path = Conf::read('db_new_tenant');
 		$scriptfile = fopen($script_path, "r");
 		if(!$scriptfile){
 		   throw new SystemError("Couldn't open '{$script_path}'");

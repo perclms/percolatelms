@@ -43,7 +43,7 @@ class Log{
 	// Internals
 
 	public static function writeToFile($msg){
-		$logFilePath = Conf::read('main', 'lms_log');
+		$logFilePath = Conf::read('log_path');
 		if(isset($GLOBALS["TEST"]) && $GLOBALS["TEST"]) {
 			$logFilePath = $GLOBALS["TEST_LOG_PATH"];
 		}

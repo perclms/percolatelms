@@ -1,0 +1,27 @@
+# Percolate LMS config
+# add custom parameters to this config as needed
+
+# dev - sends raw system errors to the UI (for debugging)
+# production - aliases system errors with reference code
+lms_env=dev
+
+# LMS must be able to write to this file
+log_path=/var/log/lms
+
+# a SQL statement script to create a new tenant schema and role
+db_new_tenant=/lms/db/tenant.sql
+
+# password for LMS master role used for initial DB connection
+db_master_pwd=xxx
+
+# private key used to generate JWT access tokens (logins, etc.)
+# at least 40 characters
+token_private_key=xxx
+
+# 'from' address for email sent by LMS
+email_from=percolate@example.com
+
+# (optional) AWS service parameters
+aws_access_key_id=xxx
+aws_access_key=xxx
+aws_s3_bucket=my_static_bucket
