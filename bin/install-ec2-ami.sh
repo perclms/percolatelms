@@ -45,6 +45,7 @@ note "Installing Apache, PostgreSQL, PHP..."
 
 yum install -y \
 	httpd24 \
+	mod24_ssl \
 	php56 \
 	php56-gd \
 	postgresql96 \
