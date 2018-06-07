@@ -85,7 +85,7 @@ St.raw_request = function(method, uri, data) {
 	};
 	var retval = m.request(req);
 	// handle errors with default handler:
-	retval.then(null, function(e) {
+	retval.catch(function(e) {
 		St.request_fail_default(req.method, req.url, e);
 	});
 	return retval;
