@@ -35,8 +35,7 @@ class Log{
 	}
 
 	public static function info($msg){ 
-		$msgtxt = "[info] $msg";
-		return self::writeToFile($msgtxt);
+		$msgtxt = "[info] $msg"; return self::writeToFile($msgtxt);
 	}
 
 
@@ -48,14 +47,14 @@ class Log{
 			$logFilePath = $GLOBALS["TEST_LOG_PATH"];
 		}
 
-		$tid = Tenants::getTenantIdForLog();
+		$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "NO_HOST";
 
 		$dt = new \DateTime();
 		$isodate = $dt->format('Y-m-d\TH:i:s');
 		$stamp = $dt->getTimestamp();
 		$stamp = base_convert($stamp, 10, 36);
 
-		$msgtxt = "\n$isodate ($stamp) (tenant$tid) $msg\n";
+		$msgtxt = "\n$isodate ($stamp) ($host) $msg\n";
 		$result = file_put_contents($logFilePath, $msgtxt, FILE_APPEND);
         if($result === false) die("ERROR: Log unable to write to $logFilePath\n");
 		return $stamp;
