@@ -11,6 +11,8 @@ Percolate is a Learning Management System with the following features:
 * RESTful API with https://en.wikipedia.org/wiki/JSON_Web_Token[HATEOAS] and https://en.wikipedia.org/wiki/JSON_Web_Token[JSON Web Token] authentication
 * PDF certificate generation
 
+Percolate is also available as a SaaS http://percolatelms.com[try a FREE 14 day trial].
+
 == Requirements ==
 
 Percolate uses the following technologies and libraries:
