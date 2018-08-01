@@ -28,13 +28,14 @@ class Aws{
 
 		$SECRET_AWS_ACCESS_KEY_ID = Conf::read('aws_access_key_id');
 		$SECRET_AWS_SECRET_ACCESS_KEY = Conf::read('aws_access_key');
-
+		$AWS_DEFAULT_REGION = Conf::read('aws_default_region');
+		$AWS_SES_REGION = Conf::read('aws_ses_region');
 
 		self::$sdkClient = new \Aws\Sdk([
 			'version' => 'latest',
-			'region'  => 'us-west-1',
+			'region'  => $AWS_DEFAULT_REGION,
 			'Ses' => [
-				'region' => 'us-west-2',
+				'region' => $AWS_SES_REGION,
 			],
 			'credentials' => [
 				'key'    => $SECRET_AWS_ACCESS_KEY_ID,
