@@ -60,5 +60,6 @@ m.route(document.body, default_route, {
 	"/records/content/:content_id": RecordContent,
 	"/records/people/:person_id": RecordPeople,
 	"/config": Config,
+	"/no-tenant": NoTenant,
 });
 

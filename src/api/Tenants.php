@@ -54,7 +54,7 @@ class Tenants{
 		$tid = $query->fetchColumn();
 		if(!$tid){
 			Log::warn("getTenantIdForHost('$hostname'): not found.");
-			throw new UserError("Sorry, no LMS found at this domain ('$hostname'). Perhaps check the spelling?");
+			throw new NoTenant("Sorry, no LMS found at this domain ('$hostname'). Perhaps check the spelling?");
 		}
 		return $tid;
 	}

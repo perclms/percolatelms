@@ -53,8 +53,5 @@ $api = new \HummingJay\HummingJay([
 	"/tokens/access" => "\Lms\ResTokensAccess",
 ]);
 }// end try
-catch (NotLoggedIn $e) { auth_error(401, $e->getMessage()); }
-catch (AuthFailure $e) { auth_error(401, $e->getMessage()); }
-catch (NotAuthorized $e) { auth_error(403, $e->getMessage()); }
-catch (UserError $e) { error(400, $e->getMessage()); }
-catch(\Exception $e) { system_error($e->getMessage()); }
+catch (\Exception $e) { lms_error_handler($e); }
+

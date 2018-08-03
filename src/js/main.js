@@ -164,3 +164,36 @@ var Main = MainComponent();
 
 
 
+// special component for displaying error message about no tenant!
+
+function NoTenant(){
+	var box_style = {
+		width:"500px",
+		margin:"2em auto",
+		background:"white",
+		borderRadius:"4px",
+		boxShadow:"4px  4px 4px #CCC"};
+	var head_style = {
+		background:"#666",
+		color:"#FFF",
+		fontSize:"30px",
+		textAlign:"center", 
+		borderRadius:"4px 4px 0 0", 
+		padding:"1em"};
+	var para_style = {margin:"2em"};
+	var logo_style = {width:"300px",margin:"1em auto",display:"block"}
+	var imgsrc = "https://s3.amazonaws.com/static.perclms.com/common/ui/default_logo.svg";
+
+	function view(){
+		return m(".box", {style:box_style}, [
+		   m(".head", {style:head_style}, "Subdomain Not Found"),
+		   m("img", {src:imgsrc,style:logo_style}),
+		   m("p", {style:para_style}, St.error),
+		   m("br"),
+		]);
+	}
+
+	return {
+		view:view
+	};
+}

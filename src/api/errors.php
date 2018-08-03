@@ -19,7 +19,7 @@
 
 namespace Lms;
 
-// define exceptions
+// define errors and types of exceptions
 
 // system
 class SystemError extends \Exception { }
@@ -36,46 +36,74 @@ class ZipError extends UserError { }
 
 
 
-// catch all errors
+// register these universal error-handlers with PHP:
 
 set_error_handler(function($num, $msg, $file, $line){
 	// test with: $foo = $does_not_exist;
-	system_error("$file:$line: $msg (via seh)"); 
+	lms_error_handler(new SystemError("$file:$line: $msg (via SEH)")); 
 });
 register_shutdown_function(function(){
 	// test with: does_not_exist();
 	if (! ($e = error_get_last())) return;
-	system_error("{$e['file']}:{$e['line']}: {$e['message']} (via rsf)"); 
+	lms_error_handler(new SystemError("{$e['file']}:{$e['line']}: {$e['message']} (via RSF)")); 
 });
 
 
 
 // error handling functions
 
-function auth_error($http_status, $msg){
-	header('WWW-Authenticate: Bearer realm="perclms", error="invalid_request", ');
-	error($http_status, $msg);
+function lms_error_handler($e){
+	// auth and user errors:
+	if( $e instanceof NotLoggedIn || 
+		$e instanceof AuthFailure ||
+		$e instanceof NotAuthorized ||
+		$e instanceof UserError) users_error($e);
+
+	// catch-all:
+	system_error($e);
 }
 
-function system_error($msg){
+function system_error($e){
+	$msg = $e->getMessage();
 	$stamp = Log::error($msg);
 	if (Conf::read('lms_env') != "dev") {
 		// in production environment, we don't want to leak system errors
 		$msg = "Sorry, there was a system error (reference code '{$stamp}').";
+		// clone exception with new message:
+		$e_type = get_class($e);
+		$e = new $e_type($msg);
 	}
-	error(500, $msg);
+	users_error($e);
 }
 
-function error($http_status, $msg){
+function users_error($e){
 	// don't do this if running from command-line
 	if(php_sapi_name() == 'cli') return;
+
+	$http_status = 400; // default, generic
+	$msg = $e->getMessage();
+	$error_type = get_class($e);
+
+	// set header and http_status for auth errors:
+	if( $e instanceof NotLoggedIn || 
+		$e instanceof AuthFailure ||
+		$e instanceof NotAuthorized ) {
+		header('WWW-Authenticate: Bearer realm="perclms", error="invalid_request", ');
+		$http_status = 401;
+	}
+	if($e instanceof NotAuthorized) $http_status = 403; // specifically
+
+	// is actually a system error, return 500 status
+	if($e instanceof SystemError) $http_status = 500;
+
 	http_response_code($http_status);
 	header('Content-type: application/json; charset=utf-8');
 	echo json_encode([
 		'hypermedia' => [
 			'success' => false,
 			'title' => "Error",
-			'description' => $msg
+			'description' => $msg,
+			'error_type' => $error_type,
 		]
 	]) . "\n";
 	exit;

@@ -67,12 +67,19 @@ St.request_config = function(xhr) {
 	}
 }
 St.request_fail_default = function(method, uri, response_data) {
+	// Default error message is not very helpful:
 	var descr = "Sorry, something went wrong between here and the server. Perhaps refresh and try again?";
+	// but we should be able to override it with additional info
 	if (response_data && response_data.hypermedia && response_data.hypermedia.description) {
 		descr = response_data.hypermedia.description;
 	}
-	// great for debugging, but not so user-friendly:
-	//St.error = "Response to " + method + " " + uri + ": " + descr;
+	if (response_data && response_data.hypermedia && response_data.hypermedia.error_type) {
+		var error_type = response_data.hypermedia.error_type;
+		if(error_type = "\\LMS\\NoTenant") {
+			m.route.set('/no-tenant');
+
+		}
+	}
 	St.error = descr;
 };
 
@@ -90,3 +97,4 @@ St.raw_request = function(method, uri, data) {
 	});
 	return retval;
 };
+

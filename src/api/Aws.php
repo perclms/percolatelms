@@ -31,6 +31,7 @@ class Aws{
 		$AWS_DEFAULT_REGION = Conf::read('aws_default_region');
 		$AWS_SES_REGION = Conf::read('aws_ses_region');
 
+
 		self::$sdkClient = new \Aws\Sdk([
 			'version' => 'latest',
 			'region'  => $AWS_DEFAULT_REGION,
