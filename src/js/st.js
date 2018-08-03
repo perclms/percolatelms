@@ -75,7 +75,7 @@ St.request_fail_default = function(method, uri, response_data) {
 	}
 	if (response_data && response_data.hypermedia && response_data.hypermedia.error_type) {
 		var error_type = response_data.hypermedia.error_type;
-		if(error_type = "\\LMS\\NoTenant") {
+		if(error_type == "\\LMS\\NoTenant") {
 			m.route.set('/no-tenant');
 
 		}
