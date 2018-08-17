@@ -34,7 +34,7 @@ class ResFiles extends \HummingJay\Resource{
 	public function POST($server){
 		$error = "";
 
-		Log::info("{$_SERVER['CONTENT_LENGTH']} and max is ".ini_get('post_max_size').".");
+		//Log::info("{$_SERVER['CONTENT_LENGTH']} and max is ".ini_get('post_max_size').".");
 
 		// https://andrewcurioso.com/blog/archive/2010/detecting-file-size-overflow-in-php.html
 		// We know what type of request is being processed, we have the $POST and $FILES arrays, 
@@ -169,6 +169,19 @@ class ResFiles extends \HummingJay\Resource{
 			// add the new file_id and fname to the config table
 			$config["logo_file_id"] = $fid;
 			$config["logo_fname"] = $launch_fname;
+
+			// write new config to db
+			$db = Db::update('config', ["value" => json_encode($config)], 1); 
+		}
+
+		if($purpose == "stylesheet"){
+			// first, pull existing config json data
+			$db = Db::select("config.value", 1); // hard-coded config_id of '1'
+			$config = (array) json_decode($db->fetchColumn());
+
+			// add the new file_id and fname to the config table
+			$config["stylesheet_file_id"] = $fid;
+			$config["stylesheet_logo_fname"] = $launch_fname;
 
 			// write new config to db
 			$db = Db::update('config', ["value" => json_encode($config)], 1); 

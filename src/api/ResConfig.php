@@ -30,14 +30,16 @@ class ResConfig extends \HummingJay\Resource{
 
 		// deliver css if resource called with ?prop=css query string
 		if(isset($_GET["prop"]) && $_GET["prop"] == "css"){
-			$css_prefix = "/lms/src/css/";
-			$css_file = $css_prefix."main.css";
-			if(isset($config["css"]) && file_exists($css_prefix.$config["css"])){
-			   $css_file = $css_prefix.$config["css"];
+			header('Content-Type: text/css');
+			if(isset($config["stylesheet_file_id"])){
+				$fid = $config["stylesheet_file_id"];
+				$fname = $config["stylesheet_logo_fname"];
+				SvcStorage::serveFile($fid, $fname);
 			}
-			header('Content-type: text/css');
-			readfile($css_file);
-			exit;
+			else{ 
+				readfile("/lms/src/css/main.css");
+				exit;
+			}
 		}
 
 		return $server;

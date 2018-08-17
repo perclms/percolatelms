@@ -59,7 +59,8 @@ CREATE TYPE file_purpose_enum AS ENUM (
 	'attachment',
 	'content-thumb',
 	'person-thumb',
-	'site-logo'
+	'site-logo',
+	'stylesheet'
 );
 
 -- note: author constraint added after person table created
@@ -233,3 +234,8 @@ CREATE TABLE content_session (
   PRIMARY KEY (content_id)
 );
 
+-- -------------------------------------------------------
+--                        updates
+-- -------------------------------------------------------
+-- 2018-08-14: added stylesheet file purpose
+-- ALTER TYPE file_purpose_enum ADD VALUE 'stylesheet';

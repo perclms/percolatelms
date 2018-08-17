@@ -18,13 +18,15 @@
 
 var Config = function() {
 	var config = St.use("config");
-	var uploader = null;
-	var show_uploader = true;
+	var logo_uploader = null;
+	var show_logo_uploader = true;
+	var css_uploader = null;
+	var show_css_uploader = true;
 
 	function oninit() {
 		config.fetch();
 
-		uploader = Uploader({
+		logo_uploader = Uploader({
 			instructions: "Drop logo image here or click to upload.",
 			purpose: "site-logo",
 			callback: function(result_data){
@@ -32,8 +34,15 @@ var Config = function() {
 				var c = config.get();
 				c.logo_fname = d.launch_fname;
 				c.logo_file_id = d.file_id;
-				// show_uploader = false;
+				// show_logo_uploader = false;
 				Main.loadSiteConfig();
+			}
+		});
+		css_uploader = Uploader({
+			instructions: "Drop CSS file here or click to upload.",
+			purpose: "stylesheet",
+			callback: function(result_data){
+				show_css_uploader = false;
 			}
 		});
 	}
@@ -54,11 +63,12 @@ var Config = function() {
 				m(".logo-preview", Main.viewLogoImg()),
 				m("h3", "Upload new logo"),
 				m("p", "You can upload a new logo in .png, .jpg, or .gif formats.  It is recommended that your logo be approximately 40px tall."),
-				show_uploader ? uploader.view() : null,
+				show_logo_uploader ? logo_uploader.view() : null,
 				m("h3", "Custom title"),
 				Ut.viewBoundInput("Web browser page title", config.prop('title')),
-				m("h3", "Custom CSS"),
-				Ut.viewBoundInput("Stylesheet selection", config.prop('css')),
+				m("h3", "Custom CSS stylesheet"),
+				//Ut.viewBoundInput("Stylesheet selection", config.prop('css')),
+				show_css_uploader ? css_uploader.view() : "New CSS uploaded. Refresh your browser to see the changes. (Note: you may need to use CTRL+F5 to 'hard refresh')",
 				m("br"),
 				m("button", { onclick: save }, "Save"),
 			]),

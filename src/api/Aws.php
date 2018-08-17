@@ -203,7 +203,8 @@ class Aws{
 			'Content-Encoding',
 		] as $header){
 			$s3_param = $head_data[str_replace('-', '', $header)];
-			if($s3_param){
+			// don't override headers we've *already* set (example: stylesheet)
+			if($s3_param && !header_sent($header)){
 				header("{$header}: {$s3_param}");
 			}
 		}
@@ -213,8 +214,22 @@ class Aws{
 		flush();
 
 		// send the file!
-
 		readfile("s3://{$bucket}/{$key}");
+
 		exit;
 	}
+}
+
+
+// https://php.net/manual/en/function.headers-list.php#109395
+function header_sent($header) {
+    $headers = headers_list();
+    $header = trim($header,': ');
+    $result = false;
+    foreach ($headers as $hdr) {
+        if (stripos($hdr, $header) !== false) {
+            $result = true;
+        }
+    }
+    return $result;
 }
