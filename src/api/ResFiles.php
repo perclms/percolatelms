@@ -245,8 +245,8 @@ class ResFiles extends \HummingJay\Resource{
 
 
 	public function make_thumbnail($src_path, $thumb_path){
-		$thumb_max_width = 150;
-		$thumb_max_height = 150;
+		$thumb_max_width = 280;
+		$thumb_max_height = 280;
 
 		//$finfo = finfo_open(FILEINFO_MIME_TYPE);
 		//$mime_type = finfo_file($finfo, $src_path);
@@ -266,6 +266,12 @@ class ResFiles extends \HummingJay\Resource{
 		}
 
 		list($src_width, $src_height, $src_type) = getimagesize($src_path);
+
+		if ( $src_width == $thumb_max_width ) {
+			// already perfect width, copy file to thumb path
+			copy($src_path, $thumb_path);
+			return true;
+		}
 
 		$src_ratio = $src_width / $src_height;
 		$thumb_ratio = $thumb_max_width / $thumb_max_height;
