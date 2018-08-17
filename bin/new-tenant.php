@@ -16,7 +16,7 @@ if(!preg_match('/.+\..+/',$hostname)) {
 $pdo = Db::getMasterPdo();
 try {
 	$tid = Tenants::getTenantIdForHost($hostname);
-} catch (UserError $e) {
+} catch (NoTenant $e) {
 	// Good! That's what we want!
 }
 if ($tid) {
