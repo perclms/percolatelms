@@ -22,6 +22,7 @@ var Config = function() {
 	var show_logo_uploader = true;
 	var css_uploader = null;
 	var show_css_uploader = true;
+	var show_css_changed_msg = false;
 
 	function oninit() {
 		config.fetch();
@@ -42,8 +43,17 @@ var Config = function() {
 			instructions: "Drop CSS file here or click to upload.",
 			purpose: "stylesheet",
 			callback: function(result_data){
-				show_css_uploader = false;
+				show_css_changed_msg = true;
 			}
+		});
+	}
+
+	function default_css() {
+		var c = config.get();
+		c.stylesheet_file_id = null;
+		c.stylesheet_logo_fname = null;
+		config.send().then(function() {
+			show_css_changed_msg = true;
 		});
 	}
 
@@ -66,11 +76,14 @@ var Config = function() {
 				show_logo_uploader ? logo_uploader.view() : null,
 				m("h3", "Custom title"),
 				Ut.viewBoundInput("Web browser page title", config.prop('title')),
-				m("h3", "Custom CSS stylesheet"),
-				//Ut.viewBoundInput("Stylesheet selection", config.prop('css')),
-				show_css_uploader ? css_uploader.view() : "New CSS uploaded. Refresh your browser to see the changes. (Note: you may need to use CTRL+F5 to 'hard refresh')",
 				m("br"),
 				m("button", { onclick: save }, "Save"),
+				m("h3", "Custom CSS stylesheet"),
+				//Ut.viewBoundInput("Stylesheet selection", config.prop('css')),
+				show_css_changed_msg ?  "Stylesheet updated. Refresh your browser to see the changes. (Note: you may need to use CTRL+F5 to 'hard refresh')" : null,
+				show_css_uploader ? css_uploader.view() : null,
+				m("br"),
+				m("button", { onclick: default_css }, "Revert to default stylesheet"),
 			]),
 			Main.viewBottom(),
 		];
