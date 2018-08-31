@@ -110,6 +110,13 @@ class ResFiles extends \HummingJay\Resource{
 
 
 		// -----------------------------------------------------------------
+		// Perform CSV import for people
+		if($purpose == "people-import") {
+			ResPeople::import($tmp_filename, $server);
+		}
+
+
+		// -----------------------------------------------------------------
 		// Write to [file] table
 
 		$fid = Db::insert("file", [

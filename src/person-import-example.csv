@@ -1,0 +1,7 @@
+name,email,tags,username,info
+Michael Scott,mscott@example.com,$admin,mrcool,
+Dwight Schrute,dschrute@example.com,"sales, security",,beet farmer
+Jim Halpert,jhalpert@example.com,sales,,
+Pam Beesly,pbeesly@example.com,reception,,
+Stanley Hudson,shudson@example.com,,,
+Kevin Malone,,,,

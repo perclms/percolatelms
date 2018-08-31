@@ -69,6 +69,8 @@ var PeopleComponent = function() {
 			m(".page-controls", [
 				m(".title", "People"),
 				m("a[href=/people/new]", {oncreate: m.route.link}, "Add person"),
+				m("br"),
+				m("a[href=/people/import]", {oncreate: m.route.link}, "Import people"),
 				R.isNil(tags) ? null : tags.viewThumbList(),
 				m("a.link[href=/people/metatags]", { oncreate: m.route.link }, "Manage metatags"),
 			]),
@@ -447,3 +449,91 @@ var PeopleMetaTags = function() {
 		oninit: oninit
 	}; // mithril module
 };
+
+
+
+
+var PeopleImport = function() {
+	var uploader = null;
+	var import_results = null;
+	var view_raw = false;
+
+	function oninit() {
+		uploader = Uploader({
+			instructions: "Drop CSV file here or click to upload.",
+			purpose: "people-import",
+			callback: afterUpload,
+		});
+	}
+
+	function afterUpload(result_data) {
+		uploader.hide();
+		import_results = result_data.imported;
+	}
+
+	function viewImportResults(){
+		if(!import_results) return null;
+	
+		// create csv for download!	
+		var head="name,email,tags,username,info,pid,access_link\n";
+		var raw_csv = import_results.reduce(function(txt,p){
+			p = p.map(function(z){return '"'+z+'"'}); // quote
+			return txt+p.join(",")+"\n"; // comma-separate
+		}, head);
+		var raw_csv_uri = encodeURIComponent(raw_csv);
+		var raw_csv_data = "data:text/csv;charset=utf-8,"+raw_csv_uri;
+
+		return m(".import-results", [
+			m("table", [
+				m("thead", m("tr", [
+					m("th", "Name"),
+					m("th", "Email"),
+					m("th", "Username"),
+					m("th", "Access link"),
+				])),
+				import_results.map(function(p){
+					var mt = "mailto:"+p[1];
+					return m("tr",
+						m("td", p[0]),
+						m("td", m("a", {href:mt}, p[1])),
+						m("td", p[3]),
+						m("td", m("a", {href:p[6]}, "link")),
+					);
+				}),
+			]),
+			m("a", {href:raw_csv_data, download:"import-results.csv"}, "Download these results as a CSV"),
+			" (Recommended)",
+		]);
+	}
+
+	function viewRawResults(){
+		if(!view_raw) return null;
+		var head="name,email,tags,username,info,pid,access_link\n";
+		return m("textarea", import_results.reduce(function(csvtxt,p){
+			p = p.map(function(z){return '"'+z+'"'}); // quote
+			return csvtxt+p.join(","); // comma-separate
+		}, head));
+	}
+
+	function view() {
+		return m(".people-import", [
+			Main.viewTop(),
+			m(".dialog", [
+				m(".title", "Import People"),
+				m("p", "To import more than one person at a time, you can submit a CSV file.  CSV stands for 'Comma-Separated Values' and is a common interchange format for tabular data such as spreadsheets. Most spreadsheet programs can import and export the CSV format."),
+				m("a", {href:"person-import-example.csv"}, "Download sample CSV file"),
+				m("p", "Only the 'name' column is required."),
+				m("h3", "Upload CSV file to start import"),
+				uploader.view(),
+				viewImportResults(),
+			]),
+		]);
+	}
+
+	return {
+		view: view,
+		oninit: oninit,
+	}; // mithril module
+};
+
+

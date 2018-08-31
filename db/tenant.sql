@@ -51,25 +51,14 @@
 
 -- create views for common queries requiring aggregates or complicated joins
 
-CREATE TYPE file_purpose_enum AS ENUM (
-	'scorm',
-	'image',
-	'video',
-	'audio',
-	'attachment',
-	'content-thumb',
-	'person-thumb',
-	'site-logo',
-	'stylesheet'
-);
 
--- note: author constraint added after person table created
+-- note: file author constraint added after person table created
 CREATE TABLE file (
 	file_id SERIAL PRIMARY KEY,
 	author INTEGER, 
 	upload_fname TEXT NOT NULL CHECK (upload_fname <> ''),
 	launch_fname TEXT NOT NULL CHECK (launch_fname <> ''),
-	purpose file_purpose_enum NOT NULL,
+	purpose TEXT NOT NULL,
 	size INTEGER NOT NULL DEFAULT 0
 );
 
@@ -238,4 +227,8 @@ CREATE TABLE content_session (
 --                        updates
 -- -------------------------------------------------------
 -- 2018-08-14: added stylesheet file purpose
--- ALTER TYPE file_purpose_enum ADD VALUE 'stylesheet';
+--   ALTER TYPE file_purpose_enum ADD VALUE 'stylesheet';
+-- 2018-08-27: dropped enum for file purpose 
+--   ALTER TABLE file ALTER COLUMN purpose TYPE text;
+--   DROP TYPE file_purpose_enum;
+

@@ -48,6 +48,7 @@ m.route(document.body, default_route, {
 	"/people": People,
 	"/people/metatags": PeopleMetaTags,
 	"/people/new": PersonEd,
+	"/people/import": PeopleImport,
 	"/people/:person_id": PersonEd,
 	"/enroll": Erules,
 	"/records": Records,
