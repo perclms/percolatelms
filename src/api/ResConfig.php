@@ -37,7 +37,7 @@ class ResConfig extends \HummingJay\Resource{
 				SvcStorage::serveFile($fid, $fname);
 			}
 			else{ 
-				readfile("/lms/src/css/main.css");
+				readfile("/lms/src/css/colors.css");
 				exit;
 			}
 		}

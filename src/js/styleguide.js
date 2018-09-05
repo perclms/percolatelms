@@ -178,7 +178,96 @@ var StyleGuide = function() {
 			m(CbPlayer, {test_cb:"Course content\n\n"+lorem(300)+"\n\n"+lorem(180)}),
 
 
-
+			// color quick reference
+			
+			m("hr"),
+			m(".dialog", [
+				m(".title", "Color Quick Reference"),
+				m("p", "This portion contains all items from the customizable color stylesheet in order."),
+				m("a", {href:'#'}, "Anchor link"),
+				m("p", "Bordered table:"),
+				m("table", m("tbody", [
+					m("tr", m("th", "table.bordered th")),
+					m("tr", m("td", "table.bordered")),
+					m("tr", m("td", "table.bordered")),
+					m("tr", m("td", "table.bordered")),
+				])),
+				m("p", "Striped table:"),
+				m("table.striped", m("tbody", [
+					m("tr", m("td", "table.striped")),
+					m("tr", m("td", "table.striped")),
+					m("tr", m("td", "table.striped")),
+					m("tr", m("td", "table.striped")),
+				])),
+				m("input[type=text]", {value:"text input"}),
+				m("br"),
+				m("textarea", "textarea"),
+				m("br"),
+				m("input[disabled=disabled]", {value:"disabled input"}),
+				m("br"),
+				m("button", "button"),
+				m("button.primary", "button.primary"),
+				m("button[disabled=disabled]", "button.disabled"),
+				m(".topbar", [
+					m("span", ".topbar"),
+					m(".menuitem", ".menuitem"),
+					m(".menuitem.current", ".menuitem.current"),
+					m(".me", [
+						m("span", ".me"),
+					]),
+				]),
+				m(".me-menu", [
+					m("a.link.me-item", ".me-item"),
+				]),
+				m(".page-controls", [
+					m(".title", ".page controls .title"),
+				]),
+				m(".danger", ".danger"),
+				m("a.link", {onclick:function(){St.error=lorem(100);}}, "click here for .error-box"), 
+				m(".stackitem", ".stackitem"),
+				m("p", "this all in a .dialog box already, also see top for .dialog .title"),
+				m(".dialog-controls", ".dialog-controls"),
+				m("ul.tags", [
+					m("li", "ul.tags li"),
+					m("li.selected", "ul.tags li.selected"),
+				]),
+				m(".upload", [
+					m("p", ".upload"),
+					m("i", "i(con)"),
+					m(".instructions", ".instructions"),
+				]),
+				m(".card", [
+					m("p", ".card"),
+					m(".type", ".type"),
+				]),
+				m(".card.action", [
+					m("p", ".card.action"),
+				]),
+				m(".cards-bottom", [
+					m("p", ".cards-bottom"),
+					m(".more", ".more"),
+				]),
+				m(".erule-list", [
+					m("p", ".erule-list"),
+					m(".e", ".e"),
+					m(".e", ".e"),
+				]),
+				m(".cb-btn", m(".label", ".cb-btn .label")),
+				m(".cb-quiz-hacker-view", ".cb-quiz-hacker-view"),
+				m(".discussion", [
+					m("p", ".discussion"),
+					m(".comment", [
+						m("p", ".comment"),
+						m(".date", ".date"),
+						m(".reply-link", ".reply-link"),
+					]),
+				]),
+				m(".player-topbar", [
+					m("a", ".player-topbar a"),
+				]),
+				m("br"),
+				m(".player", m(".welcome-bottom-bar", ".player .welcome-bottom-bar")),
+			]),
 
 			Main.viewBottom(),
 		]);

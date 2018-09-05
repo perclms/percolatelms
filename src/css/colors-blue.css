@@ -1,0 +1,56 @@
+/* 
+ * Example blue styles
+ *
+ */
+
+body { color: #676767; background-color: #EEE; }
+a { color: #3BA8BA; }
+table.striped tbody tr:nth-child(odd) { background-color: #ddd; }
+tr, th, table.bordered td, table.bordered th { border-color: #888; }
+input[type=text], input[type=password], textarea { border-color: #CCC; color: #555; }
+input:focus { border-color: #86a062; }
+input:disabled { background-color: #DDD; color: #999; }
+button { border-color: #CCC; background-color: #fff; color: #555; }
+button:hover:enabled { background-color: #EEE; }
+button:active:enabled { background-color: #DDD; }
+button.primary { background-color: #3BA8BA; color: #FFF; }
+button.primary:hover:enabled { background-color: #4CD6ED; }
+button.primary:active:enabled { background-color: #3BA8BA; }
+button:disabled { background-color: #DDD; color: #999; }
+
+.topbar { border-bottom-color: #3BA8BA; background-color: #fff; }
+.menuitem { color: #666; }
+.menuitem.current { background-color: #3BA8BA; color: #FFF; }
+.me { background-color: #3BA8BA; color: #FFF; }
+.me-menu .me-item { background-color: #3BA8BA; color: #FFF; }
+.me-menu .me-item:hover { background-color: #fff; color: #666; }
+
+.page-controls { background-color: #FFF; border-bottom: 2px solid #3BA8BA }
+.page-controls .title { color: #5A5A5A; }
+.danger { color: #e74e3e; background-color: #f8d2cf; }
+.error-box { border-bottom: 2px solid #e74e3e; }
+.stackitem { border: 1px solid #888; }
+.dialog { background-color: #FFF; box-shadow: 0px 3px 3px .5px #CCC; }
+.dialog > .title:first-child { background-color: #666; color: #FFF; }
+.dialog-controls { border-bottom-color: #3BA8BA; }
+ul.tags li { background-color: #AAA; color: #FFF; }
+ul.tags li.selected { background-color: #3BA8BA; }
+
+.upload { border-color: #CCC; color: #CCC; }
+.upload i { color: #CCC; }
+.upload .instructions { color: #999; }
+.card { box-shadow: 0px 3px 3px .5px #CCC; background-color: #FFF; }
+.card .type { color: #666; }
+.card.action { border: 1px solid #AAA; }
+.cards-bottom { background: #888; }
+.cards-bottom .more { border-color: #FFF; color: #FFF; }
+
+.erule-list .e { background-color: #fff; box-shadow: 0px 3px 3px .5px #CCC; }
+.cb-btn .label { color: #555; }
+.cb-quiz-hacker-view { border-color: 2px dotted #666; }
+.discussion { background-color: #EEE; border-top-color: #3BA8BA; }
+.comment .date { color: #888; }
+.comment .reply-link { color: #3BA8BA; }
+.player-topbar { background-color: #FFF; }
+.player-topbar a { color: #666; }
+.player .welcome-bottom-bar { border-color: #3BA8BA; }
