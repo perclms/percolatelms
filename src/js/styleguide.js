@@ -209,11 +209,14 @@ var StyleGuide = function() {
 				m("button.primary", "button.primary"),
 				m("button[disabled=disabled]", "button.disabled"),
 				m(".topbar", [
-					m("span", ".topbar"),
-					m(".menuitem", ".menuitem"),
-					m(".menuitem.current", ".menuitem.current"),
-					m(".me", [
-						m("span", ".me"),
+					m("p", ".topbar"),
+					m(".menubar", [
+						m("p", ".menubar"),
+						m(".item", ".item"),
+						m(".item.current", ".item.current"),
+						m(".item.me", [
+							m("span", ".me"),
+						]),
 					]),
 				]),
 				m(".me-menu", [

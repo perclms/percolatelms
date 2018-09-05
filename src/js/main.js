@@ -84,8 +84,11 @@ var MainComponent = function() {
 			m(".topbar", [
 				viewError(),
 				m(".logo", {onclick:clickLogo}, viewLogoImg()),
-				viewMenu(),
-				viewMe(),
+				m(".menubar", [
+					viewMenu(),
+					viewMe(),
+				]),
+				m(".border"),
 			]),
 			viewMeMenu(),
 		]);
@@ -104,7 +107,7 @@ var MainComponent = function() {
 		var img = m("img.avatar", { src: path });
 		if(!tid || tid == "null") img = m("i.material-icons", "face");
 		//var moreclass = (me_menu_hidden ? "" : ".expanded");
-		return m(".me", {onclick: Ut.toggleProp(me_menu_hidden)}, [
+		return m(".item.me", {onclick: Ut.toggleProp(me_menu_hidden)}, [
 			img,
 			m("i.material-icons", "arrow_drop_down"),
 		]);
@@ -133,9 +136,9 @@ var MainComponent = function() {
 			var route_path_tail = /\/(\w+)/.exec(m.route.get());
 			var current_route = route_path_tail ? route_path_tail[1] : "";
 			var curclass = (current_route == r ? "current" : "");
-			return m(".menuitem", {class:curclass, onclick:function(){m.route.set("/"+r)}}, [
+			return m(".item", {class:curclass, onclick:function(){m.route.set("/"+r)}}, [
 					m("i.material-icons", icon),
-					m("span", title),
+					m("b", title),
 			]);
 		}
 

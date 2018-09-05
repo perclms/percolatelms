@@ -21,11 +21,12 @@ button.primary:hover:enabled { background-color: #B0D182; }
 button.primary:active:enabled { background-color: #86BA3B; }
 button:disabled { background-color: #DDD; color: #999; }
 
-.topbar { border-bottom-color: #86BA3B; background-color: #fff; }
-.menuitem { color: #666; }
-.menuitem.current { background-color: #86BA3B; color: #FFF; }
-.me { background-color: #86BA3B; color: #FFF; }
-.me-menu .me-item { background-color: #86bA3B; color: #FFF; }
+.topbar { background-color: #fff; }
+.topbar .border { border-bottom-color: #86BA3B; }
+.menubar .item { color: #666; }
+.menubar .item.current { background-color: #86BA3B; color: #FFF; }
+.menubar .item.me { background-color: #86BA3B; color: #FFF; }
+.me-menu .me-item { background-color: #86BA3B; color: #FFF; }
 .me-menu .me-item:hover { background-color: #fff; color: #666; }
 
 .page-controls { background-color: #FFF; border-bottom: 2px solid #86BA3B }

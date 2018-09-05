@@ -188,97 +188,83 @@ button:disabled { cursor: default; }
 .upload i { font-size: 3em; /* icon size, not text */ }
 .upload .instructions { margin: 0 2em; }
 
-.topbar { 
-	display: flex;
+
+.topbar .border {
 	border-bottom-width: 10px;
-	border-bottom-style: solid; 
-	height: 60px; 
+	border-bottom-style: solid;
+	clear: both;
+}
+.logo { 
+	margin: 5px;
+	width: 160px; 
+	height: 40px; 
 	box-sizing: border-box;
-	justify-content: flex-end;
+	display: inline-block;
 }
-.topbar .logo { 
-	padding: 5px;
-	cursor: pointer;
-	margin-right: auto;
-}
-.topbar .logo img {
-	height: 40px;
-}
-.menuitem { 
-	vertical-align: middle;
-	box-sizing: border-box;
-	text-transform: uppercase;
-	cursor: pointer;
+.menubar { float: right; }
+.menubar .item {
+	display: inline-block;
+	min-width: 30px;
 	text-align: center;
-	flex-basis: auto;
-	flex-grow: 1;
-	max-width: 10em;
-	align-self: right;
-	height: 50px;
+	cursor: pointer;
+	padding: 8px 3px 8px 3px;
+	margin-left: 10px;
+	vertical-align: middle;
 }
-.menuitem i {
+.menubar .item b {
+	text-transform: uppercase;
+	font-weight: normal;
+}
+.menubar .item i {
+	font-size: 18px;
 	display: block;
 }
-
-/* media query width breakpoints for top menu */
-@media (min-width: 0em) {
-	.menuitem { padding-top: 7px; }
-	.menuitem i { font-size: .9em; }
-	.menuitem span { font-size: .6em; }
-	.topbar .logo { display: none; }
+.menubar .item.me { 
+	border-radius: 10px; 
+	margin: 5px; 
+	padding: 3px;
 }
-
-@media (min-width: 30em) {
-	.menuitem { padding-top: 10px; }
-	.menuitem i { font-size: 1.3em; }
-	.menuitem span { font-size: .7em; }
-	.topbar .logo { display: initial; }
-}
-
-@media (min-width: 45em) {
-	.menuitem span { font-size: .9em; }
-}
-
-@media (min-width: 60em) {
-	.menuitem span { font-size: 1em; }
-}
-
-/* MS Internet Exploder 11 hacks */
-/* https://stackoverflow.com/a/28419263/695615 */ 
-@media all and (-ms-high-contrast: none), (-ms-high-constrast: active) {
-	.topbar {
-		justify-content: flex-start;
-	}
-	.topbar .logo { 
-		display: inline-block;
-		margin-right: 0;
-	}
-}
-
-
-.me { 
-	border-radius: .4em; 
-	padding: 7px; 
-	display: flex;
-	margin: 5px;
-	cursor: pointer;
-}
+.menubar .item.me i { display: inline; }
 .me .avatar {
 	display: inline;
 	width: 30px;
 	height: 30px;
 	border-radius: 100%;
 }
-
 .me-menu {
 	position: absolute;
 	right: 0;
 	display: flex;
 	flex-direction: column;
 }
-
 .me-menu .me-item { width: 9em; }
 .me-menu .me-item span { margin-left: .5em; position: relative; top: -.3em;}
+@media (min-width: 0) { 
+	/* no text, small margin */
+	.menubar .item b { display: none; } 
+	.menubar .item { margin-left: 5px; } 
+}
+@media (min-width: 700px) { 
+	/* text on */
+	.menubar .item b { display: initial; font-size: 11px; }
+}
+@media (min-width: 800px) { 
+	/* text and margin larger */
+	.menubar .item b { display: initial; font-size: 12px; } 
+	.menubar .item { margin-left: 7px; } 
+}
+@media (min-width: 1000px) { 
+	/* text and margin larger */
+	.menubar .item b { display: initial; font-size: 15px; } 
+	.menubar .item { margin-left: 20px; } 
+}
+
+
+
+
+
+
+
 
 .logo-preview img {
 	max-width: 100px;
