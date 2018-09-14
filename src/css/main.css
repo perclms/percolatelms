@@ -34,6 +34,14 @@ th { font-weight: bold; font-size: 90%; }
 .comment .date { font-size: .8em; }
 .discussion .count { font-size: 1.4em; }
 .sub { font-size: 1.1em; }
+@media (max-width: 700px) { 
+	body { font-size: .9em; }
+	h1 { font-size: 1.3em; }
+	h2 { font-size: 1.2em; }
+	h3 { font-size: 1.1em; }
+	.page-controls .title { font-size: 1.2em; }
+	.stack .stackitem .title { font-size: .8em; }
+}
 
 
 /* 
@@ -360,9 +368,7 @@ button:disabled { cursor: default; }
 	border-width: 2px; 
 	border-style: dotted; 
 }
-
-.cb-cols { display: flex; }
-.cb-cols .col { flex-grow: 1; }
+.cb-cols .col { width:50%; float: left; }
 
 .content-builder textarea {
 	height: 11em;

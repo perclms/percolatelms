@@ -594,7 +594,7 @@ var CbEd = function() {
 				prevbtn(),
 				m("span.message", "Page " + Cbm.get_pagenum()),
 				nextbtn(),
-				m(".big-space"),
+				m("br.clear"),
 			]),
 			Main.viewBottom(),
 		]);
