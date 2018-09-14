@@ -60,7 +60,7 @@ var Home = function() {
 			if(r){
 				var rec = "";
 				if(r.last_launched_ts){
-					var d = moment(r.last_launched);
+					var d = moment(r.last_launched_ts);
 					rec = "Last launched: "+d.format('MMM Do, YYYY');
 				}
 				return m(".records", ""+rec);
