@@ -94,7 +94,7 @@ class Auth{
 
 		// make access tokens expire in 24 hours
 		if(time() - $decoded->ts > (60*60*24)){
-			throw new AuthFailure("Access token has expired.");
+			//throw new AuthFailure("Access token has expired.");
 		}
 
 		unset($person_info['password']); // exclude from token
