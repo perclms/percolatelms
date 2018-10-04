@@ -49,6 +49,11 @@ var MainComponent = function() {
 		});
 	}
 
+	function customConfig(key){
+		if(typeof CustomConfig == "undefined") return null;
+		return CustomConfig.get(key);
+	}
+
 	function siteConfig(){
 		return site_config;
 	}
@@ -159,6 +164,7 @@ var MainComponent = function() {
 		loadSiteConfig: loadSiteConfig,
 		siteConfig: siteConfig,
 		viewLogoImg: viewLogoImg,
+		customConfig: customConfig,
 	};
 };
 

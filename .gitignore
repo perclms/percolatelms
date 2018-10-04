@@ -3,3 +3,6 @@
 src/api/vendor/*
 src/api/SvcEmail.php
 src/api/SvcStorage.php
+src/api/CustomConfig.php
+src/js/custom_config.js
+

@@ -44,7 +44,7 @@ var Home = function() {
 
 		admin_view_welcome = false;
 	}
-
+	
 	function viewMyContent() {
 		if (!my_content_filtered) {
 			return "Loading...";
@@ -118,6 +118,10 @@ var Home = function() {
 		]);
 	}
 
+	function viewLearnerBuildLink(){
+		if(Main.customConfig('show_learner_build_content') === false) return null;
+		return m("a[href=/content/new/cb]", {oncreate:m.route.link}, "Build new content");
+	}
 
 	function view() {
 		if (!Login.is_logged_in()) return m("p", "Sorry, you are not logged in. Please refresh your browser.");
@@ -133,7 +137,7 @@ var Home = function() {
 					m("h1", "Content Assigned to Me"),
 					m("p", "Below are my content items, learning paths, and discussions."),
 					viewSearchBox(),
-					m("a[href=/content/new/cb]", {oncreate:m.route.link}, "Build new content"),
+					viewLearnerBuildLink(),
 					viewCatalogLink(d),
 					m("br.clear"),
 				]),
@@ -145,6 +149,6 @@ var Home = function() {
 
 	return {
 		view: view,
-		oninit: oninit
+		oninit: oninit,
 	}; // mithril module
 };

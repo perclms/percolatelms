@@ -24,11 +24,14 @@ class ResConfig extends \HummingJay\Resource{
 	public $description = "GET a bundle of data describing LMS config, post updates.";
 
 	public function GET($server){
+		// get regular config
 		$db = Db::select("config.value", 1); // hard-coded config_id of '1'
 		$config = (array) json_decode($db->fetchColumn());
 		$server->addResponseData($config);
 
 		// deliver css if resource called with ?prop=css query string
+		// note: requires getting config from DB (above)
+		// note: returns file and exits - does not return config data
 		if(isset($_GET["prop"]) && $_GET["prop"] == "css"){
 			header('Content-Type: text/css');
 			if(isset($config["stylesheet_file_id"])){
@@ -41,6 +44,14 @@ class ResConfig extends \HummingJay\Resource{
 				exit;
 			}
 		}
+
+		// load any custom config information
+		$custom_config = null;
+		if(class_exists('\Lms\CustomConfig') && 
+			method_exists('\Lms\CustomConfig', 'fetchBundle')){
+			$custom_config = CustomConfig::fetchBundle();
+		}
+		$server->addResponseData($custom_config);
 
 		return $server;
 	}

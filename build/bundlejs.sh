@@ -18,7 +18,7 @@ BUILD_DIR="/lms/build"
 
 # minify and concat our source - order matters!
 
-pushd $SRCDIR
+pushd $SRCDIR > /dev/null
 cat \
 	vendor/mithril/mithril.min.js \
 	vendor/mithril/stream.min.js \
@@ -27,6 +27,7 @@ cat \
 	vendor/sortable/sortable.min.js \
 	> $BUNDLE
 cat $BUILD_DIR/license_header.txt >> $BUNDLE
+[[ -f custom_config.js ]] && cat custom_config.js | $JSMIN >> $BUNDLE
 cat \
 	st.js \
 	utils.js \
@@ -48,4 +49,4 @@ cat \
 	main.js \
 	route.js \
 	| $JSMIN >> $BUNDLE
-popd
+popd > /dev/null

@@ -31,7 +31,7 @@ spl_autoload_register(function($class){
 		return true;
 	}
 
-	echo "Autoloader Error: Couldn't find class '$class' in $path0\n";
+	//echo "Autoloader Error: Couldn't find class '$class' in $path0\n";
 
 	// first check common
 	$path1 = __DIR__."/common/{$class}.php";
@@ -47,7 +47,7 @@ spl_autoload_register(function($class){
 		return true;
 	}
 
-	echo "Autoloader Error: Couldn't find class '$class' in $path1 or in $path2\n";
+	//echo "Autoloader Error: Couldn't find class '$class' in $path1 or in $path2\n";
 
 	return false;
 });

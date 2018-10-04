@@ -132,8 +132,6 @@ var ContentComponent = function() {
 		return m("img.thumb", { src: path });
 	}
 
-
-
 	function submitNew2() {
 		// this exists to prototype the new mini-form
 		submitNew(new_type(), new_title());
@@ -150,6 +148,14 @@ var ContentComponent = function() {
 		});
 	}
 
+	function viewDiscussionTypeLink(){
+		if(Main.customConfig('show_discussion_type') === false) return null;
+		return [
+			m("a.link[href='/content/new/comment']",{oncreate: m.route.link}, "Discussion"),
+			" | ",
+		];
+	}
+
 
 	function view() {
 		return [
@@ -162,8 +168,7 @@ var ContentComponent = function() {
 					" | ",
 					m("a.link[href='/content/new/scorm']",{oncreate: m.route.link}, "Scorm"),
 					" | ",
-					m("a.link[href='/content/new/comment']",{oncreate: m.route.link}, "Discussion"),
-					" | ",
+					viewDiscussionTypeLink(),
 					m("a.link[href='/content/new/lpath']",{oncreate: m.route.link}, "Learning Path"),
 				]),
 				R.isNil(tags) ? null : [ m("h3", "Tags"), tags.viewThumbList(), ],
@@ -361,6 +366,7 @@ var ContentViewer = function() {
 
 		function viewCertificateLink(){
 			if (!record) return null;
+			if(Main.customConfig('show_print_cert') === false) return null;
 			var tags = Ut.tagstrToList(content.tags);
 			if(!R.contains('$certificate', tags) || !record['completed']) return null;
 			var me = Login.get('person_id');
