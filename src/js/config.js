@@ -69,6 +69,7 @@ var Config = function() {
 			Main.viewTop(),
 			m(".dialog", [
 				m(".title", "Configure LMS appearance and settings"),
+				Main.customConfig('additional_interface'),
 				m("h3", "Current logo"),
 				m(".logo-preview", Main.viewLogoImg()),
 				m("h3", "Upload new logo"),
