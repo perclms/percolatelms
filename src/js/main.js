@@ -195,9 +195,9 @@ function NoTenant(){
 
 	function view(){
 		return m(".box", {style:box_style}, [
-		   m(".head", {style:head_style}, "Subdomain Not Found"),
+		   m(".head", {style:head_style}, "No LMS Here"),
 		   m("img", {src:imgsrc,style:logo_style}),
-		   m("p", {style:para_style}, "Sorry, there is no LMS registered at this domain or subdomain. Please check the spelling and try again."),
+		   m("p", {style:para_style}, St.noTenantMessage),
 		   m("br"),
 		]);
 	}

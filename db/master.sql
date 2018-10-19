@@ -67,7 +67,8 @@ SET ROLE master;
 -- Note the 
 
 CREATE TABLE master.tenant (
-	tenant_id SERIAL PRIMARY KEY
+	tenant_id SERIAL PRIMARY KEY,
+	disabled BOOLEAN DEFAULT FALSE
 );
 
 
@@ -83,3 +84,8 @@ CREATE TABLE master.host (
 );
 
 
+-- -------------------------------------------------------
+--                        updates
+-- -------------------------------------------------------
+-- 2018-10-19: added 'disabled' field
+--   ALTER TABLE tenant ADD COLUMN disabled BOOLEAN DEFAULT FALSE;

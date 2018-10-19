@@ -56,6 +56,16 @@ class Tenants{
 			Log::warn("getTenantIdForHost('$hostname'): not found.");
 			throw new NoTenant("Sorry, no LMS found at this domain ('$hostname'). Perhaps check the spelling?");
 		}
+		// check for tenant 'disabled' status
+		$sql = "SELECT disabled FROM tenant WHERE tenant_id=:tenant_id";
+		$query = $pdo->prepare($sql);
+		$query->bindParam(":tenant_id", $tid);
+		$query->execute();
+		$disabled = $query->fetchColumn();
+		if($disabled){
+			Log::warn("getTenantIdForHost('$hostname'): tenant is disabled.");
+			throw new NoTenant("Sorry, this LMS has been disabled. Please check with your administrator.");
+		}
 		return $tid;
 	}
 
