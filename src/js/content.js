@@ -151,7 +151,7 @@ var ContentComponent = function() {
 	function viewDiscussionTypeLink(){
 		if(Main.customConfig('show_discussion_type') === false) return null;
 		return [
-			m("a.link[href='/content/new/comment']",{oncreate: m.route.link}, "Discussion"),
+			m("a.link[href='/content/new/comment']",{oncreate: m.route.link}, "Create Discussion"),
 			" | ",
 		];
 	}
@@ -163,13 +163,13 @@ var ContentComponent = function() {
 			//viewContentTypeMenu(),
 			m(".page-controls", [
 				m(".title", "Content"),
-				m("p", [ "Create new: ",
+				m("p", [ 
 					m("a.link[href='/content/new/cb']",{oncreate: m.route.link}, "Content Builder"),
 					" | ",
-					m("a.link[href='/content/new/scorm']",{oncreate: m.route.link}, "Scorm"),
+					m("a.link[href='/content/new/scorm']",{oncreate: m.route.link}, "Upload Scorm"),
 					" | ",
 					viewDiscussionTypeLink(),
-					m("a.link[href='/content/new/lpath']",{oncreate: m.route.link}, "Learning Path"),
+					m("a.link[href='/content/new/lpath']",{oncreate: m.route.link}, "Create Learning Path"),
 				]),
 				R.isNil(tags) ? null : [ m("h3", "Tags"), tags.viewThumbList(), ],
 			]),
