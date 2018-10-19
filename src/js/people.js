@@ -232,6 +232,24 @@ var PersonEd = function() {
 		return m(Home, { person_id: person.get().person_id });
 	}
 
+	function viewAdminControls(){
+		if(!Login.is_admin()) return null;
+
+		return [
+			m("a.link", { href: "/records/people/" + person_id, oncreate: m.route.link }, "View records"),
+		];
+	}
+
+	function viewIsFrozen(){
+		var tags = Ut.tagstrToList(person.get().tags);
+		if(R.contains('$frozen', tags)){
+			return m('h2.danger', 'This person is frozen');
+		}
+		else {
+			return null;
+		}
+	}
+
 	function view() {
 		if (person_id == 0) return m("p", "Person editor requires person_id.");
 		if (R.isNil(person.get())) return Ut.viewLoading();
@@ -250,6 +268,7 @@ var PersonEd = function() {
 			m(".dialog", [
 				m(".title", dialog_title),
 				m(".form", [
+					viewIsFrozen(),
 					People.viewAvatar(person.get()),
 					uploader.view(),
 					m("br"),
@@ -263,7 +282,7 @@ var PersonEd = function() {
 					Login.is_admin() ? Ut.viewBoundInput("Tags", person.prop('tags')) : null,
 					m("button.primary", { onclick: save }, "Save"),
 					m("button", { onclick: cancel }, "Cancel"),
-					Login.is_admin() ? m("a.link", { href: "/records/people/" + person_id, oncreate: m.route.link }, "View records") : null,
+					viewAdminControls(),
 				]),
 			]),
 		]);

@@ -62,6 +62,7 @@ CREATE TABLE file (
 	size INTEGER NOT NULL DEFAULT 0
 );
 
+-- note: person.frozen column deprecated, use $frozen tag instead
 CREATE TABLE person (
 	person_id SERIAL PRIMARY KEY,
 	name TEXT NOT NULL CHECK (name <> ''),
@@ -72,7 +73,7 @@ CREATE TABLE person (
 	thumb_file_id INTEGER REFERENCES file,
 	thumb_fname TEXT NOT NULL DEFAULT '',
 	tags TEXT[],
-	frozen BOOLEAN NOT NULL DEFAULT FALSE,
+	frozen BOOLEAN NOT NULL DEFAULT FALSE, 
 	created TIMESTAMP NOT NULL DEFAULT current_timestamp
 );
 -- create author constraint for file table   
@@ -93,6 +94,7 @@ CREATE TYPE content_type_enum AS ENUM (
 	'session'
 );
 
+-- note: content.frozen column deprecated, use $frozen tag instead
 CREATE TABLE content (
 	content_id SERIAL PRIMARY KEY,
 	author INTEGER REFERENCES person (person_id) ON DELETE CASCADE,

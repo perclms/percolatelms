@@ -73,7 +73,6 @@ class Validate{
 			"thumb_file_id" => "INTEGER",
 			"thumb_fname" => "TEXT",
 			"tags" => "TEXT[]",
-			"frozen" => "BOOLEAN",
 			"created" => "TIMESTAMP",
 		]);
 	}
@@ -88,7 +87,6 @@ class Validate{
 			"tags" => "TEXT[]",
 			"thumb_file_id" => "INTEGER",
 			"thumb_fname" => "TEXT",
-			"frozen" => "BOOLEAN",
 			"hidden" => "BOOLEAN",
 			"created" => "TIMESTAMP",
 		]);
