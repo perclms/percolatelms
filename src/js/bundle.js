@@ -736,9 +736,6 @@ window.stream=createStream;}());
 // this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-var CustomConfig=(function(){function get(key){if(key=="additional_interface"){return[m("h3","Payment options"),m("a",{href:"/billing/"},"Edit or add payment method"),];}
-return Main.siteConfig()[key];}
-return{get:get};})();
 var St={};St.error=null;St.api_prefix="/api/";St.use=function(uri){var mydata=null;var myset=function(value){mydata=value;return value;}
 return{get:function(){return mydata;},set:myset,fetch:function(){return St.raw_request('GET',uri,null).then(myset);},send:function(){return St.raw_request('POST',uri,mydata);},del:function(){return St.raw_request('DELETE',uri,null);},prop:function(name){return{get:function(){return mydata?mydata[name]:null;},set:function(value){if(R.type(mydata)!="Object")mydata={};mydata[name]=value;},}}}}
 St.request_config=function(xhr){var auth_token=localStorage.getItem('auth_token');if(!R.isNil(auth_token)){xhr.setRequestHeader('Authorization',"Bearer "+auth_token);}}
@@ -1127,3 +1124,6 @@ return{view:view};}
 var mrs=m.route.set;m.route.set=function(path,data,options){mrs(path,data,options);window.scrollTo(0,0);}
 var mrl=m.route.link;m.route.link=function(vnode){mrl(vnode);window.scrollTo(0,0);}
 var default_route=Login.is_logged_in()?"/home":"/login";m.route(document.body,default_route,{"/login":Login,"/home":Home,"/player/:content_id":Player,"/catalog":Catalog,"/change-pwd/:access_token":ChangePwd,"/forgot-pwd":ForgotPwd,"/content":Content,"/content/new/:type":ContentEd,"/content/:content_id":ContentViewer,"/content/:content_id/edit":ContentEd,"/content/:content_id/edit-cb":CbEd,"/content/:content_id/edit-scorm":ScormEd,"/content/:content_id/edit-lpath":LpathEd,"/people":People,"/people/metatags":PeopleMetaTags,"/people/new":PersonEd,"/people/import":PeopleImport,"/people/:person_id":PersonEd,"/enroll":Erules,"/records":Records,"/records/edit":RecordEdit,"/records/edit/person/:person_id/content/:content_id":RecordEdit,"/records/content":RecordContent,"/records/people":RecordPeople,"/records/cb":RecordCb,"/records/cb/:content_id":RecordCb,"/records/content/:content_id":RecordContent,"/records/people/:person_id":RecordPeople,"/config":Config,"/no-tenant":NoTenant,});
+var CustomConfig=(function(){function get(key){if(key=="additional_interface"){return[m("h3","Payment options"),m("a",{href:"/billing/"},"Edit or add payment method"),];}
+return Main.siteConfig()[key];}
+return{get:get};})();

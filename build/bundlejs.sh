@@ -27,7 +27,6 @@ cat \
 	vendor/sortable/sortable.min.js \
 	> $BUNDLE
 cat $BUILD_DIR/license_header.txt >> $BUNDLE
-[[ -f custom_config.js ]] && cat custom_config.js | $JSMIN >> $BUNDLE
 cat \
 	st.js \
 	utils.js \
@@ -49,4 +48,5 @@ cat \
 	main.js \
 	route.js \
 	| $JSMIN >> $BUNDLE
+[[ -f custom_config.js ]] && cat custom_config.js | $JSMIN >> $BUNDLE
 popd > /dev/null
