@@ -25,7 +25,6 @@ namespace Lms;
 class SystemError extends \Exception { }
 class DbDuplicate extends SystemError { }
 class NotFound extends SystemError { }
-class NoTenant extends SystemError { }
 // user
 class UserError extends \Exception { }
 class AuthFailure extends UserError { }
@@ -33,6 +32,7 @@ class NotLoggedIn extends UserError { }
 class NotAuthorized extends UserError { }
 class ScormError extends UserError { }
 class ZipError extends UserError { }
+class NoTenant extends UserError { }
 
 
 
