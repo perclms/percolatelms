@@ -64,6 +64,12 @@ function lms_error_handler($e){
 }
 
 function system_error($e){
+	// failsafe
+	if(is_string($e)){
+		Log::error("Backtrace: ".print_r(debug_backtrace(), true));
+		$e = new SystemError("system_error() given string: $e\n(SEE BACKTRACE IN LOG!)");
+	}
+
 	$msg = $e->getMessage();
 	$stamp = Log::error($msg);
 	if (Conf::read('lms_env') != "dev") {
