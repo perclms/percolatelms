@@ -250,6 +250,14 @@ var PersonEd = function() {
 		}
 	}
 
+	function viewLastLogin(){
+		var last_login = person.get().last_login;
+		if(!last_login) return null;
+		var lld = moment(last_login);
+		var lldf = lld.format('MMM Do, YYYY');
+		return m("div", {style:{float: 'right'}}, "Last logged in: "+lldf);
+	}
+
 	function view() {
 		if (person_id == 0) return m("p", "Person editor requires person_id.");
 		if (R.isNil(person.get())) return Ut.viewLoading();
@@ -269,6 +277,7 @@ var PersonEd = function() {
 				m(".title", dialog_title),
 				m(".form", [
 					viewIsFrozen(),
+					viewLastLogin(),
 					People.viewAvatar(person.get()),
 					uploader.view(),
 					m("br"),

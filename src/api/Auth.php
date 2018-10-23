@@ -64,6 +64,10 @@ class Auth{
 			throw new AuthFailure("This account is frozen.");
 		}
 
+		// update last login timestamp
+		$pid = $person_info['person_id'];
+		Db::update('person', ['last_login'=>'NOW()'], $pid);
+
 		unset($person_info['password']);
 		return self::create_token($person_info);
 	}

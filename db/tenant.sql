@@ -85,7 +85,7 @@ CREATE VIEW person_v AS
 	FROM person;
 -- everything except password, file_id
 CREATE VIEW person_full_v AS 
-	SELECT person_id, name, username, email, info, thumb_file_id, thumb_fname, array_to_string(tags, ',') as tags, created
+	SELECT person_id, name, username, email, info, thumb_file_id, thumb_fname, array_to_string(tags, ',') as tags, created, last_login
 	FROM person;
 CREATE TYPE content_type_enum AS ENUM (
 	'scorm',
@@ -235,6 +235,10 @@ CREATE TABLE content_session (
 -- 
 -- 2018-10-23: added last_login column for people
 --   ALTER TABLE person ADD COLUMN last_login TIMESTAMP;
+--   DROP VIEW person_full_v;
+--   CREATE VIEW person_full_v AS 
+--     SELECT person_id, name, username, email, info, thumb_file_id, thumb_fname, 
+--     array_to_string(tags, ',') as tags, created, last_login FROM person;
 --
 -- 2018-08-14: added stylesheet file purpose
 --   ALTER TYPE file_purpose_enum ADD VALUE 'stylesheet';
