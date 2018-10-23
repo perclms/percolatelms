@@ -24,6 +24,7 @@ var CbmModel = function() {
 	var curpage = 0;
 	var edit_mode = false;
 	var saved = false;
+	var passing_score = 80;
 
 	function get_curhash() {
 		if (edit_mode) return "q_" + curpage;
@@ -79,10 +80,18 @@ var CbmModel = function() {
 
 	function save_score() {
 		if (edit_mode || saved) return;
+		var score = qscore();
+		var pass = (score >= passing_score);
+		var passed = (pass ? 'true' : 'false');
+		var failed = (pass ? 'false' : 'true');
+		var completed = (pass ? 'true' : 'false');
 		var person_id = Login.get('person_id');
 		var cr = St.use('content/' + content_id + '/person/' + person_id + '/record');
 		cr.set({
-			score: qscore()
+			score: score,
+			passed: passed,
+			failed: failed,
+			completed: completed,
 		});
 		cr.send();
 		saved = true;
@@ -120,6 +129,9 @@ var CbmModel = function() {
 		set_content_id: function(cid) {
 			content_id = cid;
 		},
+		set_passing_score: function(ps) {
+			passing_score = ps;
+		},
 		get_page: function() {
 			check_page();
 			return {
@@ -154,6 +166,7 @@ var CbmModel = function() {
 		go_next: function() {
 			if (curpage < pages.length - 1 || edit_mode) {
 				curpage++;
+				saved = false; // make sure each new page load resets [save score]/[complete]
 			}
 		},
 		go_prev: function() {
@@ -528,7 +541,7 @@ var CbEd = function() {
 		var textfield = appendBtnClick("\n[text entry]");
 		var correct_fbk = appendBtnClick("\n[correct feedback] Your correct feedback here");
 		var incorrect_fbk = appendBtnClick("\n[incorrect feedback] Your incorrect feedback here");
-		var score = appendBtnClick("\n[score]\n[save score]\n");
+		var score = appendBtnClick("\n[score]\n[passing score:80]\n[save score]\n");
 		var complete = appendBtnClick("\n[complete]\n");
 
 		function button(onclick, icon, label){
@@ -855,6 +868,18 @@ var CbPage = function() {
 					return m("i", "(save score: not sending score in edit mode)");
 				} else {
 					Cbm.save_score();
+				}
+			},
+		},
+		{ 
+			name: "passing_score",
+			regex: /\[passing score:(\d+)\]/,
+			func: function(t){
+				var passing_score = t.matches[0];
+				if (Cbm.is_edit_mode()) {
+					return m("i", "(passing score: set to "+passing_score+")");
+				} else {
+					Cbm.set_passing_score(passing_score);
 				}
 			},
 		},
