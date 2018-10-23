@@ -20,12 +20,16 @@
 namespace Lms;
 
 class Conf{
-	public static function read($key){
-		$config = '/etc/lms.conf';
-		if (! is_readable($config)) {
-			throw new SystemError("Unable to read from '$config': ".$e->getMessage());
+	private static $path = '/etc/lms.conf';
+
+	private static function must_exist(){
+		if (! is_readable(self::$path)) {
+			throw new SystemError("Unable to read from '{self::$path}': ".$e->getMessage());
 		}
-		$lines = file($config);
+	}
+
+	public static function read($key){
+		$lines = file(self::$path);
 		foreach($lines as $line) {
 			if(preg_match("/^$key\s*=\s*(.*)$/", $line, $m)) {
 				return $m[1];
@@ -33,6 +37,16 @@ class Conf{
 		}
 
 		throw new SystemError("Unable to read key '$key' from config.");
+	}
+
+	public static function has($key){
+		$lines = file(self::$path);
+		foreach($lines as $line) {
+			if(preg_match("/^$key\s*=/", $line)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

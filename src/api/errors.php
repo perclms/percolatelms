@@ -54,18 +54,14 @@ register_shutdown_function(function(){
 
 function lms_error_handler($e){
 	// auth and user errors:
-	if( $e instanceof NotLoggedIn || 
-		$e instanceof AuthFailure ||
-		$e instanceof NotAuthorized ||
-		$e instanceof UserError) users_error($e);
+	if($e instanceof UserError) users_error($e);
 
 	// catch-all:
 	system_error($e);
 }
 
 function system_error($e){
-	// failsafe
-	if(is_string($e)){
+	if(is_string($e)){ // failsafe
 		Log::error("Backtrace: ".print_r(debug_backtrace(), true));
 		$e = new SystemError("system_error() given string: $e\n(SEE BACKTRACE IN LOG!)");
 	}
