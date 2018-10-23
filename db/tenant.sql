@@ -74,7 +74,8 @@ CREATE TABLE person (
 	thumb_fname TEXT NOT NULL DEFAULT '',
 	tags TEXT[],
 	frozen BOOLEAN NOT NULL DEFAULT FALSE, 
-	created TIMESTAMP NOT NULL DEFAULT current_timestamp
+	created TIMESTAMP NOT NULL DEFAULT current_timestamp,
+	last_login TIMESTAMP
 );
 -- create author constraint for file table   
 ALTER TABLE file ADD CONSTRAINT author_fk FOREIGN KEY (author) REFERENCES person (person_id);
@@ -228,8 +229,16 @@ CREATE TABLE content_session (
 -- -------------------------------------------------------
 --                        updates
 -- -------------------------------------------------------
+--
+-- NOTE: To update all schemas (tenants) at once, use the
+-- apply_example.sql (PL/pgSQL loop) as a template
+-- 
+-- 2018-10-23: added last_login column for people
+--   ALTER TABLE person ADD COLUMN last_login TIMESTAMP;
+--
 -- 2018-08-14: added stylesheet file purpose
 --   ALTER TYPE file_purpose_enum ADD VALUE 'stylesheet';
+--
 -- 2018-08-27: dropped enum for file purpose 
 --   ALTER TABLE file ALTER COLUMN purpose TYPE text;
 --   DROP TYPE file_purpose_enum;
