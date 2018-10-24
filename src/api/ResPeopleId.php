@@ -45,8 +45,9 @@ class ResPeopleId extends \HummingJay\Resource{
 			Auth::require_token('$admin');
 		}
 
-
 		$d = $server->requestData;
+
+		$d = Validate::person($d);
 
 		// if a new password was sent, hash it
 		if(isset($d->password)){
