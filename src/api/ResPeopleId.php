@@ -48,6 +48,7 @@ class ResPeopleId extends \HummingJay\Resource{
 		$d = $server->requestData;
 
 		$d = Validate::person($d);
+		$d = (object) $d; // the rest of the conversions below depend on an obj
 
 		// if a new password was sent, hash it
 		if(isset($d->password)){
@@ -61,7 +62,6 @@ class ResPeopleId extends \HummingJay\Resource{
 		// remove avatar properties, they're not set here!
 		unset($d->thumb_file_id);
 		unset($d->thumb_fname);
-
 
 		if(property_exists($d, 'tags')){
 			$d->tags = '{'.$d->tags.'}';
