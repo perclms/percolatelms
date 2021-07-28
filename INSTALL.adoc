@@ -14,7 +14,7 @@ To install Percolate to a fresh server:
 
 == Clone the Git repo, set permissions
 
-Though not required, Percolate expects to be installed at `/lms`.
+Though not required, Percolate expects to be installed at `/lms`. Instructions will also refer to this path.
 
 	sudo mkdir /lms
 	sudo chown <you> /lms
@@ -67,9 +67,12 @@ All of these libraries are most easily installed using the link:https://getcompo
 Percolate is already configured to download specific versions of these libraries using Composer like so:
 
 
+	# setup composer
 	curl -sS https://getcomposer.org/installer | sudo php
 	sudo mv composer.phar /usr/local/bin/composer
 	sudo ln -s /usr/local/bin/composer /usr/bin/composer
+	
+	# install percolate dependencies
 	cd /lms/src/api
 	composer update
 
