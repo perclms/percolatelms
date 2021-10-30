@@ -71,6 +71,11 @@ There are four types of content:
 * *Discussions* - small forum-like discussion boards
 * *Learning Paths* - lists of other content put into specific order, may be nested
 
+When a person launches a content item, a record is created or updated with the launch time, launch count, etc.
+All content types have the same basic records, even discussions.  
+Other types such as SCORM and those made with the Content Builder can record much more information.
+
+
 === Tags ===
 
 People may be grouped and organized by tags.
@@ -92,10 +97,6 @@ Bascially, an enrollment rule can be as simple as assigning one content item to 
 Because people in an organization can sometimes be part of overlapping groups, Percolate has a more advanced feature for creating logical combinations of tags called "metatags".
 Metatags use boolean operators `AND` and `OR` to combine exactly two other tags (example: `sales AND department-c`).
 After being created, metatags are automatically appended to any person who matches the rule (anyone who has both the `sales` and `department-c` tags in our example).
-
-When a person launches a content item, a record is created or updated with the launch time, launch count, etc.
-All content types have the same basic records, even discussions.  
-Other types such as SCORM and those made with the Content Builder can record much more information.
 
 
 == License ==
