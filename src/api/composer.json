@@ -1,7 +1,7 @@
 {
     "require": {
         "ratfactor/hummingjay": "4.0.2",
-        "firebase/php-jwt": "^2.1",
+        "firebase/php-jwt": "^6.0",
         "aws/aws-sdk-php": "^3.10",
         "setasign/fpdf": "^1.8"
     }
